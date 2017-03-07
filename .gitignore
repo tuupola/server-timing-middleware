@@ -1,0 +1,5 @@
+/vendor/
+/demo/vendor/
+/report/
+composer.lock
+.phplint-cache

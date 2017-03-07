@@ -1,0 +1,44 @@
+{
+    "name": "tuupola/server-timing-middleware",
+    "description": "PSR-7 server timing middleware",
+    "keywords": [
+        "PSR-7",
+        "middleware"
+    ],
+    "homepage": "https://github.com/tuupola/server-timing-middleware",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mika Tuupola",
+            "email": "tuupola@appelsiini.net",
+            "homepage": "http://www.appelsiini.net/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^5.5 || ^7.0",
+        "symfony/stopwatch": "^3.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8",
+        "squizlabs/php_codesniffer": "^2.5",
+        "overtrue/phplint": "^0.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tuupola\\Middleware\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tuupola\\Middleware\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "composer phplint && composer phpcs && composer phpunit",
+        "phpcs": "vendor/bin/phpcs --standard=PSR2 --extensions=php --encoding=utf-8 --ignore=*/vendor/* . -p",
+        "phpunit": "vendor/bin/phpunit --coverage-text --coverage-html ./report/",
+        "phplint": "vendor/bin/phplint . --exclude=vendor/",
+        "watch": "find . -name \"*.php\" -not -path \"./vendor/*\" -o -name \"*.json\" -not -path \"./vendor/*\"| entr -c composer test"
+    }
+}

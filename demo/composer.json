@@ -1,0 +1,6 @@
+{
+    "require": {
+        "slim/slim": "^3.7",
+        "symfony/stopwatch": "^3.2"
+    }
+}
