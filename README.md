@@ -64,9 +64,7 @@ $app->get("/test", function (Request $request, Response $response) {
         usleep(50000);
     });
 
-    $this->stopwatch->set("SQL", function () {
-        usleep(30000);
-    });
+    $this->stopwatch->set("SQL", 34);
 
     return $response;
 });
