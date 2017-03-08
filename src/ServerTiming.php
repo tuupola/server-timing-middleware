@@ -64,18 +64,28 @@ class ServerTiming
 
         $this->stopwatch->stopAll();
 
-        $header = "";
-        foreach ($this->stopwatch->values() as $key => $value) {
-            $seconds = $value / 1000;
-            $header .= sprintf("%s=%01.3f, ", $key, $seconds);
-        };
-        $header = preg_replace("/, $/", "", $header);
+        return $response->withHeader(
+            "Server-Timing",
+            $this->generateHeader($this->stopwatch->values())
+        );
+    }
 
-        return $response->withHeader("Server-Timing", $header);
-        /*
-        return $response->withHeader("Server-Timing", 'Total=0.120, cpu=0.009;
-        "CPU", mysql=0.005; "MySQL", filesystem=0.006; "Filesystem"');
-        */
+    public function generateHeader(array $values)
+    {
+        /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
+        $regex = "/[^[:alnum:]!#$%&\'*\/+\-.^_`|~]/";
+        $header = "";
+        foreach ($values as $description => $timing) {
+            $seconds = $timing / 1000;
+            if (preg_match($regex, $description)) {
+                $token = preg_replace($regex, "", $description);
+                $token = strtolower(trim($token, "-"));
+                $header .= sprintf('%s=%01.3f; "%s", ', $token, $seconds, $description);
+            } else {
+                $header .= sprintf("%s=%01.3f, ", $description, $seconds);
+            }
+        };
+        return $header = preg_replace("/, $/", "", $header);
     }
 
     public function setBootstrap($bootstrap)

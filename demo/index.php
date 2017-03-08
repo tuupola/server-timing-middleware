@@ -15,7 +15,7 @@ $app = new \Slim\App([
 
 $app->add(function ($request, $response, $next) {
     usleep(200000);
-	return $next($request, $response);
+    return $next($request, $response);
 });
 
 $stopwatch = new StopWatch;
@@ -26,7 +26,7 @@ $app->get("/test", function (Request $request, Response $response) use ($stopwat
     usleep(150000);
     $stopwatch->stop("MySQL");
 
-    $stopwatch->closure("API", function() {
+    $stopwatch->closure("API (test)", function () {
         usleep(100000);
     });
 
