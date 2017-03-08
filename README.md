@@ -1,4 +1,4 @@
-#  PSR-7 Server Timing Middleware
+#  PSR-7 and PSR-15 Server Timing Middleware
 
 [![Latest Version](https://img.shields.io/packagist/v/tuupola/server-timing-middleware.svg?style=flat-square)](https://packagist.org/packages/tuupola/server-timing-middleware)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
@@ -6,9 +6,12 @@
 [![HHVM Status](https://img.shields.io/hhvm/tuupola/server-timing-middleware.svg?style=flat-square)](http://hhvm.h4cc.de/package/tuupola/server-timing-middleware)
 [![Coverage](http://img.shields.io/codecov/c/github/tuupola/server-timing-middleware.svg?style=flat-square)](https://codecov.io/github/tuupola/server-timing-middleware)
 
-This middleware implements the [Server-Timing](http://wicg.github.io/server-timing/) header. This additional server info can be seen for example in Chrome devtools timing view.
+This middleware implements the [Server-Timing](http://wicg.github.io/server-timing/) header which can be used for displaying server side timing information on Chrome developer console.
 
-## Usage
+![Server Timing](http://www.appelsiini.net/img/server-timing-1400.png)
+
+
+## Install
 
 Install using [composer](https://getcomposer.org/).
 
@@ -16,29 +19,53 @@ Install using [composer](https://getcomposer.org/).
 $ composer require tuupola/server-timing-middleware
 ```
 
+## Usage
+
+Example below assumes you are using [Slim](https://www.slimframework.com/). Note that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate. By default the middleware adds three timings: `Bootstrap` is the time taken from start of the request to execution of the first incoming middleware. `Process` is the time taken for server to generate the response and process the middleware stack. `Total` is the total time taken.
+
+You can add your own timings by using the `Stopwatch` instance. See example below.
+
+
 ```php
+require __DIR__ . "/vendor/autoload.php";
+
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Tuupola\Middleware\ServerTiming;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 $app = new \Slim\App;
+$container = $app->getContainer();
 
-$app->add(function ($request, $response, $next) {
-    usleep(200000);
-	return $next($request, $response);
-});
+$container["stopwatch"] = function ($container) {
+    return new Stopwatch;
+};
 
-$stopwatch = new StopWatch;
-$app->add(new ServerTiming($stopwatch));
+$container["ServerTiming"] = function ($container) {
+    return new ServerTiming($container["stopwatch"]);
+};
 
-$app->get("/test", function (Request $request, Response $response) use ($stopwatch) {
-    $stopwatch->start("MySQL");
-    usleep(150000);
-    $stopwatch->stop("MySQL");
+$container["DummyMiddleware"] = function ($container) {
+    return function ($request, $response, $next) {
+        usleep(200000);
+        return $next($request, $response);
+    };
+};
 
-    $stopwatch->closure("API", function() {
-        usleep(100000);
+$app->add("DummyMiddleware");
+$app->add("ServerTiming");
+
+$app->get("/test", function (Request $request, Response $response) {
+    $this->stopwatch->start("External API");
+    usleep(100000);
+    $this->stopwatch->stop("External API");
+
+    $this->stopwatch->closure("Magic", function () {
+        usleep(50000);
+    });
+
+    $this->stopwatch->set("SQL", function () {
+        usleep(30000);
     });
 
     return $response;
@@ -56,7 +83,7 @@ Date: Tue, 07 Mar 2017 11:58:57 +0000
 Connection: close
 X-Powered-By: PHP/7.1.2
 Content-Type: text/html; charset=UTF-8
-Server-Timing: Bootstrap=0.010, MySQL=0.155, API=0.101, Process=0.463, Total=0.473
+Server-Timing:Bootstrap=0.008, externalapi=0.103; "External API", Magic=0.051, SQL=0.034, Process=0.396, Total=0.405
 Content-Length: 0
 ```
 
