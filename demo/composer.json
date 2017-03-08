@@ -1,6 +1,7 @@
 {
     "require": {
         "slim/slim": "^3.7",
-        "symfony/stopwatch": "^3.2"
+        "symfony/stopwatch": "^3.2",
+        "tuupola/server-timing-middleware": "dev-master"
     }
 }

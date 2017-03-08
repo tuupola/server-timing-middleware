@@ -1,13 +1,12 @@
 <?php
 
 require __DIR__ . "/vendor/autoload.php";
-require __DIR__ . "/../src/ServerTiming.php";
-require __DIR__ . "/../src/ServerTiming/StopWatch.php";
+
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Tuupola\MiddleWare\ServerTiming;
-use Tuupola\MiddleWare\ServerTiming\StopWatch;
+use Tuupola\Middleware\ServerTiming;
+use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 $app = new \Slim\App([
     "addContentLengthHeader" => false,
@@ -18,7 +17,7 @@ $app->add(function ($request, $response, $next) {
     return $next($request, $response);
 });
 
-$stopwatch = new StopWatch;
+$stopwatch = new Stopwatch;
 $app->add(new ServerTiming($stopwatch));
 
 $app->get("/test", function (Request $request, Response $response) use ($stopwatch) {
