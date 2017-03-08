@@ -10,6 +10,7 @@ php:
     - hhvm
 
 before_script:
+    - if [[ $TRAVIS_PHP_VERSION == "5.5" ]]; then composer remove --dev equip/dispatch; fi
     - travis_retry composer self-update
     - travis_retry composer install --no-interaction
 

@@ -54,6 +54,12 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldHandlePsr15()
     {
+        if (!class_exists("Equip\Dispatch\MiddlewarePipe")) {
+            $this->markTestSkipped(
+                "MiddlewarePipe class is not available."
+            );
+        }
+
         $request = (new Request())
             ->withUri(new Uri("https://example.com/"))
             ->withMethod("GET");
