@@ -15,39 +15,40 @@
 
 namespace Tuupola\Middleware;
 
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 
-class ServerTiming
+class ServerTiming implements MiddlewareInterface
 {
     private $stopwatch;
+    private $start;
     private $bootstrap = "Bootstrap";
     private $process = "Process";
     private $total = "Total";
 
     public function __construct(Stopwatch $stopwatch = null)
     {
+        /* REQUEST_TIME_FLOAT is closer to truth. */
+        if (isset($_SERVER["REQUEST_TIME_FLOAT"])) {
+            $this->start = $_SERVER["REQUEST_TIME_FLOAT"];
+        } else {
+            $this->start = microtime(true);
+        }
+
         if (null === $stopwatch) {
             $stopwatch = new Stopwatch;
         }
         $this->stopwatch = $stopwatch;
     }
 
-    public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        /* REQUEST_TIME_FLOAT is closer to truth. */
-        if (isset($_SERVER["REQUEST_TIME_FLOAT"])) {
-            $start = $_SERVER["REQUEST_TIME_FLOAT"];
-        } else {
-            $start = microtime(true);
-        }
-
-        /* Time spent from starting the request to entering this middleware. */
-        if ($this->bootstrap) {
-            $bootstrap = (microtime(true) - $start) * 1000;
-            $this->stopwatch->set($this->bootstrap, $bootstrap);
-        }
+        $this->beforeMiddlewareStack();
 
         /* Call all the other middlewares. */
         if ($this->process) {
@@ -56,13 +57,7 @@ class ServerTiming
             $this->stopwatch->stop($this->process);
         }
 
-        /* Time spent from starting the request to exiting last middleware. */
-        if ($this->total) {
-            $total = (microtime(true) - $start) * 1000;
-            $this->stopwatch->set($this->total, (integer) $total);
-        }
-
-        $this->stopwatch->stopAll();
+        $this->afterMiddlewareStack();
 
         return $response->withHeader(
             "Server-Timing",
@@ -70,7 +65,45 @@ class ServerTiming
         );
     }
 
-    public function generateHeader(array $values)
+    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    {
+        $this->beforeMiddlewareStack();
+
+        /* Call all the other middlewares. */
+        if ($this->process) {
+            $this->stopwatch->start($this->process);
+            $response = $delegate->process($request);
+            $this->stopwatch->stop($this->process);
+        }
+
+        $this->afterMiddlewareStack();
+
+        return $response->withHeader(
+            "Server-Timing",
+            $this->generateHeader($this->stopwatch->values())
+        );
+    }
+
+    private function beforeMiddlewareStack()
+    {
+        /* Time spent from starting the request to entering this middleware. */
+        if ($this->bootstrap) {
+            $bootstrap = (microtime(true) - $this->start) * 1000;
+            $this->stopwatch->set($this->bootstrap, $bootstrap);
+        }
+    }
+
+    private function afterMiddlewareStack()
+    {
+        /* Time spent from starting the request to exiting last middleware. */
+        if ($this->total) {
+            $total = (microtime(true) - $this->start) * 1000;
+            $this->stopwatch->set($this->total, (integer) $total);
+        }
+        $this->stopwatch->stopAll();
+    }
+
+    private function generateHeader(array $values)
     {
         /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
         $regex = "/[^[:alnum:]!#$%&\'*\/+\-.^_`|~]/";
@@ -86,38 +119,5 @@ class ServerTiming
             }
         };
         return $header = preg_replace("/, $/", "", $header);
-    }
-
-    public function setBootstrap($bootstrap)
-    {
-        $this->bootstrap = $bootstrap;
-        return $this;
-    }
-
-    public function getBootstrap()
-    {
-        return $this->bootstrap;
-    }
-
-    public function setProcess($process)
-    {
-        $this->process = $process;
-        return $this;
-    }
-
-    public function getProcess()
-    {
-        return $this->process;
-    }
-
-    public function setTotal($total)
-    {
-        $this->total = $total;
-        return $this;
-    }
-
-    public function getTotal()
-    {
-        return $this->total;
     }
 }
