@@ -19,8 +19,8 @@ $ composer require tuupola/server-timing-middleware
 ```php
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Tuupola\MiddleWare\ServerTiming;
-use Tuupola\MiddleWare\ServerTiming\StopWatch;
+use Tuupola\Middleware\ServerTiming;
+use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 $app = new \Slim\App;
 
