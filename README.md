@@ -85,6 +85,29 @@ Server-Timing: Bootstrap=0.008, externalapi=0.103; "External API", Magic=0.051, 
 Content-Length: 0
 ```
 
+## Usage with Doctrine DBAL
+
+If you use Doctrine DBAL you can automate SQL query timings by using the provided `QueryTimer`. It implements the DBAL `SQLLogger` interface and can be used as standalone or in a `LoggerChain`. Note that you must use the same `Stopwatch` instance with both `QueryTimer` and `ServerTiming` middleware.
+
+```php
+use Doctrine\DBAL\Logging\EchoSQLLogger;
+use Doctrine\DBAL\Logging\LoggerChain;
+
+use Tuupola\Middleware\ServerTiming\QueryTimer;
+use Tuupola\Middleware\ServerTiming\Stopwatch;
+
+$logger = new LoggerChain;
+$echo = new EchoSQLLogger;
+$stopwatch = new Stopwatch;
+$timer = QueryTimer($stopwatch);
+
+$logger->addLogger($echo);
+$logger->addLogger($timer);
+
+/* Use your Doctrine DBAL connection here. */
+$connection->getConfiguration()->setSQLLogger($logger);
+```
+
 ## Testing
 
 You can run tests either manually...

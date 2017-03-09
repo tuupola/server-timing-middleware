@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- `QueryTimer` class for Doctrine DBAL which can be used to automatically get SQL timings.
 
 ### Deprecated
 
