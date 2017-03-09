@@ -99,7 +99,7 @@ use Tuupola\Middleware\ServerTiming\Stopwatch;
 $logger = new LoggerChain;
 $echo = new EchoSQLLogger;
 $stopwatch = new Stopwatch;
-$timer = QueryTimer($stopwatch);
+$timer = new QueryTimer($stopwatch);
 
 $logger->addLogger($echo);
 $logger->addLogger($timer);
