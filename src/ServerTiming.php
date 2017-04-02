@@ -54,7 +54,11 @@ class ServerTiming implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-        $this->beforeMiddlewareStack();
+        /* Time spent from starting the request to entering this middleware. */
+        if ($this->bootstrap) {
+            $bootstrap = (microtime(true) - $this->start) * 1000;
+            $this->stopwatch->set($this->bootstrap, $bootstrap);
+        }
 
         /* Call all the other middlewares. */
         if ($this->process) {
@@ -63,31 +67,17 @@ class ServerTiming implements MiddlewareInterface
             $this->stopwatch->stop($this->process);
         }
 
-        $this->afterMiddlewareStack();
-
-        return $response->withHeader(
-            "Server-Timing",
-            $this->generateHeader($this->stopwatch->values())
-        );
-    }
-
-    private function beforeMiddlewareStack()
-    {
-        /* Time spent from starting the request to entering this middleware. */
-        if ($this->bootstrap) {
-            $bootstrap = (microtime(true) - $this->start) * 1000;
-            $this->stopwatch->set($this->bootstrap, $bootstrap);
-        }
-    }
-
-    private function afterMiddlewareStack()
-    {
         /* Time spent from starting the request to exiting last middleware. */
         if ($this->total) {
             $total = (microtime(true) - $this->start) * 1000;
             $this->stopwatch->set($this->total, (integer) $total);
         }
         $this->stopwatch->stopAll();
+
+        return $response->withHeader(
+            "Server-Timing",
+            $this->generateHeader($this->stopwatch->values())
+        );
     }
 
     private function generateHeader(array $values)
