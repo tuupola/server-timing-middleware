@@ -32,6 +32,7 @@ final class CallableDelegate implements DelegateInterface
 
     public function process(ServerRequestInterface $request)
     {
-        return ($this->callable)($request, $this->response);
+        $callable = $this->callable;
+        return $callable($request, $this->response);
     }
 }
