@@ -6,14 +6,14 @@
 [![HHVM Status](https://img.shields.io/hhvm/tuupola/server-timing-middleware.svg?style=flat-square)](http://hhvm.h4cc.de/package/tuupola/server-timing-middleware)
 [![Coverage](http://img.shields.io/codecov/c/github/tuupola/server-timing-middleware.svg?style=flat-square)](https://codecov.io/github/tuupola/server-timing-middleware)
 
-This middleware implements the [Server-Timing](http://wicg.github.io/server-timing/) header which can be used for displaying server side timing information on Chrome developer console.
+This middleware implements the [Server-Timing](http://wicg.github.io/server-timing/) header which can be used for displaying server side timing information on Chrome DevTools.
 
 ![Server Timing](http://www.appelsiini.net/img/server-timing-1400.png)
 
 
 ## Install
 
-Install using [composer](https://getcomposer.org/).
+Install using [Composer](https://getcomposer.org/):
 
 ``` bash
 $ composer require tuupola/server-timing-middleware
@@ -21,7 +21,12 @@ $ composer require tuupola/server-timing-middleware
 
 ## Usage
 
-Example below assumes you are using [Slim](https://www.slimframework.com/). Note that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate. By default the middleware adds three timings: `Bootstrap` is the time taken from start of the request to execution of the first incoming middleware. `Process` is the time taken for server to generate the response and process the middleware stack. `Total` is the total time taken.
+Example below assumes you are using [Slim](https://www.slimframework.com/). Note that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate. 
+
+By default the middleware adds three timings: 
+1. `Bootstrap` is the time taken from start of the request to execution of the first incoming middleware
+2. `Process` is the time taken for server to generate the response and process the middleware stack
+3. `Total` is the total time taken
 
 You can add your own timings by using the `Stopwatch` instance. See example below.
 
@@ -87,7 +92,8 @@ Content-Length: 0
 
 ## Usage with Doctrine DBAL
 
-If you use Doctrine DBAL you can automate SQL query timings by using the provided `QueryTimer`. It implements the DBAL `SQLLogger` interface and can be used as standalone or in a `LoggerChain`. Note that you must use the same `Stopwatch` instance with both `QueryTimer` and `ServerTiming` middleware.
+If you use Doctrine DBAL you can automate SQL query timings by using the provided `QueryTimer`. It implements the DBAL `SQLLogger` interface and can be used as standalone or in a `LoggerChain`. 
+> Note that you must use the same `Stopwatch` instance with both `QueryTimer` and `ServerTiming` middleware.
 
 ```php
 use Doctrine\DBAL\Logging\EchoSQLLogger;
@@ -110,13 +116,12 @@ $connection->getConfiguration()->setSQLLogger($logger);
 
 ## Testing
 
-You can run tests either manually...
+You can run tests either manually:
 
 ``` bash
 $ composer test
 ```
-
-... or automatically on every code change. This requires [entr](http://entrproject.org/) to work.
+Or automatically on every code change. This requires [entr](http://entrproject.org/) to work:
 
 ``` bash
 $ composer watch
