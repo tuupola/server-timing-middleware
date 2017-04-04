@@ -21,9 +21,9 @@ $ composer require tuupola/server-timing-middleware
 
 ## Usage
 
-Example below assumes you are using [Slim](https://www.slimframework.com/). Note that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate. 
+Example below assumes you are using [Slim](https://www.slimframework.com/). Note that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate.
 
-By default the middleware adds three timings: 
+By default the middleware adds three timings:
 1. `Bootstrap` is the time taken from start of the request to execution of the first incoming middleware
 2. `Process` is the time taken for server to generate the response and process the middleware stack
 3. `Total` is the total time taken
@@ -92,8 +92,7 @@ Content-Length: 0
 
 ## Usage with Doctrine DBAL
 
-If you use Doctrine DBAL you can automate SQL query timings by using the provided `QueryTimer`. It implements the DBAL `SQLLogger` interface and can be used as standalone or in a `LoggerChain`. 
-> Note that you must use the same `Stopwatch` instance with both `QueryTimer` and `ServerTiming` middleware.
+If you use Doctrine DBAL you can automate SQL query timings by using the provided `QueryTimer`. It implements the DBAL `SQLLogger` interface and can be used as standalone or in a `LoggerChain`. You must use the same `Stopwatch` instance with both `QueryTimer` and `ServerTiming` middleware.
 
 ```php
 use Doctrine\DBAL\Logging\EchoSQLLogger;
