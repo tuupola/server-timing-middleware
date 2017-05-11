@@ -86,13 +86,12 @@ class ServerTiming implements MiddlewareInterface
         $regex = "/[^[:alnum:]!#$%&\'*\/+\-.^_`|~]/";
         $header = "";
         foreach ($values as $description => $timing) {
-            $seconds = $timing / 1000;
             if (preg_match($regex, $description)) {
                 $token = preg_replace($regex, "", $description);
                 $token = strtolower(trim($token, "-"));
-                $header .= sprintf('%s=%01.3f; "%s", ', $token, $seconds, $description);
+                $header .= sprintf('%s=%01.3f; "%s", ', $token, $timing, $description);
             } else {
-                $header .= sprintf("%s=%01.3f, ", $description, $seconds);
+                $header .= sprintf("%s=%01.3f, ", $description, $timing);
             }
         };
         return $header = preg_replace("/, $/", "", $header);
