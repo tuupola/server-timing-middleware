@@ -104,7 +104,7 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
         $response = $timing($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
-        $regex = '/^dbserver=0.100; "DB Server", Bootstrap=[0-9\.]+, Process=[0-9\.]+, Total=[0-9\.]+/';
+        $regex = '/^dbserver=100; "DB Server", Bootstrap=[0-9]+, Process=[0-9]+, Total=[0-9]+/';
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
