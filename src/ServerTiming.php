@@ -89,9 +89,9 @@ class ServerTiming implements MiddlewareInterface
             if (preg_match($regex, $description)) {
                 $token = preg_replace($regex, "", $description);
                 $token = strtolower(trim($token, "-"));
-                $header .= sprintf('%s=%01.3f; "%s", ', $token, $timing, $description);
+                $header .= sprintf('%s=%d; "%s", ', $token, $timing, $description);
             } else {
-                $header .= sprintf("%s=%01.3f, ", $description, $timing);
+                $header .= sprintf("%s=%d, ", $description, $timing);
             }
         };
         return $header = preg_replace("/, $/", "", $header);
