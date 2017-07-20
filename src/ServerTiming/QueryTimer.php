@@ -21,7 +21,7 @@ class QueryTimer implements SQLLogger
 {
     public $stopwatch;
 
-    public function __construct(Stopwatch $stopwatch = null)
+    public function __construct(StopwatchInterface $stopwatch = null)
     {
         $this->stopwatch = $stopwatch;
     }
