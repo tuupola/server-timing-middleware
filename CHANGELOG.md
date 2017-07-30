@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.5.0 - 2017-07-30
+### Added
+- StopwatchInterface to enable custom stopwatch implementations ([#3](https://github.com/tuupola/server-timing-middleware/pull/3)).
+
+### Changed
+- Stopwatch instance is now protected instead of private ([#3](https://github.com/tuupola/server-timing-middleware/pull/3)).
+
 ## 0.4.0 - 2017-05-11
 ### Changed
 - Values are now in [milliseconds]((https://codereview.chromium.org/2689833002)) as required by Chrome 58.
