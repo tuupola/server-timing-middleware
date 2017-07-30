@@ -117,12 +117,12 @@ $connection->getConfiguration()->setSQLLogger($logger);
 You can run tests either manually:
 
 ``` bash
-$ composer test
+$ make test
 ```
 Or automatically on every code change. This requires [entr](http://entrproject.org/) to work:
 
 ``` bash
-$ composer watch
+$ make watch
 ```
 
 ## Contributing
