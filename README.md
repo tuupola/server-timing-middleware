@@ -3,7 +3,6 @@
 [![Latest Version](https://img.shields.io/packagist/v/tuupola/server-timing-middleware.svg?style=flat-square)](https://packagist.org/packages/tuupola/server-timing-middleware)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/tuupola/server-timing-middleware/master.svg?style=flat-square)](https://travis-ci.org/tuupola/server-timing-middleware)
-[![HHVM Status](https://img.shields.io/hhvm/tuupola/server-timing-middleware.svg?style=flat-square)](http://hhvm.h4cc.de/package/tuupola/server-timing-middleware)
 [![Coverage](http://img.shields.io/codecov/c/github/tuupola/server-timing-middleware.svg?style=flat-square)](https://codecov.io/github/tuupola/server-timing-middleware)
 
 This middleware implements the [Server-Timing](http://wicg.github.io/server-timing/) header which can be used for displaying server side timing information on Chrome DevTools.
