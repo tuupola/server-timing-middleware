@@ -122,6 +122,7 @@ $ make test
 Or automatically on every code change. This requires [entr](http://entrproject.org/) to work:
 
 ``` bash
+$ brew install entr
 $ make watch
 ```
 
