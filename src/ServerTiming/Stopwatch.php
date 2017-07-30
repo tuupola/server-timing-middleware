@@ -17,9 +17,8 @@ namespace Tuupola\Middleware\ServerTiming;
 
 use Closure;
 use Symfony\Component\Stopwatch\Stopwatch as SymfonyStopWatch;
-use Symfony\Component\Stopwatch\StopwatchEvent;
 
-class Stopwatch
+class Stopwatch implements StopwatchInterface
 {
     private $stopwatch = null;
     private $memory = null;

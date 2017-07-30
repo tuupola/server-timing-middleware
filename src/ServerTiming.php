@@ -23,16 +23,17 @@ use Interop\Http\ServerMiddleware\DelegateInterface;
 
 use Tuupola\Middleware\ServerTiming\CallableDelegate;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
+use Tuupola\Middleware\ServerTiming\StopwatchInterface;
 
 class ServerTiming implements MiddlewareInterface
 {
-    private $stopwatch;
+    protected $stopwatch;
     private $start;
     private $bootstrap = "Bootstrap";
     private $process = "Process";
     private $total = "Total";
 
-    public function __construct(Stopwatch $stopwatch = null)
+    public function __construct(StopwatchInterface $stopwatch = null)
     {
         /* REQUEST_TIME_FLOAT is closer to truth. */
         if (isset($_SERVER["REQUEST_TIME_FLOAT"])) {
@@ -63,7 +64,9 @@ class ServerTiming implements MiddlewareInterface
         /* Call all the other middlewares. */
         if ($this->process) {
             $this->stopwatch->start($this->process);
-            $response = $delegate->process($request);
+        }
+        $response = $delegate->process($request);
+        if ($this->process) {
             $this->stopwatch->stop($this->process);
         }
 
