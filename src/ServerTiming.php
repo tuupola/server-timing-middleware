@@ -15,12 +15,10 @@
 
 namespace Tuupola\Middleware;
 
+use Interop\Http\Server\MiddlewareInterface;
+use Interop\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
-use Interop\Http\ServerMiddleware\DelegateInterface;
-
 use Tuupola\Middleware\ServerTiming\CallableDelegate;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 use Tuupola\Middleware\ServerTiming\StopwatchInterface;
@@ -53,7 +51,7 @@ class ServerTiming implements MiddlewareInterface
         return $this->process($request, new CallableDelegate($next, $response));
     }
 
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         /* Time spent from starting the request to entering this middleware. */
         if ($this->bootstrap) {
@@ -65,7 +63,7 @@ class ServerTiming implements MiddlewareInterface
         if ($this->process) {
             $this->stopwatch->start($this->process);
         }
-        $response = $delegate->process($request);
+        $response = $handler->handle($request);
         if ($this->process) {
             $this->stopwatch->stop($this->process);
         }

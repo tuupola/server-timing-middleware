@@ -15,7 +15,7 @@
 
 namespace Tuupola\Middleware;
 
-use Equip\Dispatch\MiddlewarePipe;
+use Equip\Dispatch\MiddlewareCollection;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 use Zend\Diactoros\ServerRequest as Request;
 use Zend\Diactoros\Response;
@@ -54,12 +54,6 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldHandlePsr15()
     {
-        if (!class_exists("Equip\Dispatch\MiddlewarePipe")) {
-            $this->markTestSkipped(
-                "MiddlewarePipe class is not available."
-            );
-        }
-
         $request = (new Request())
             ->withUri(new Uri("https://example.com/"))
             ->withMethod("GET");
@@ -70,10 +64,10 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
             return $response;
         };
 
-        $pipe = new MiddlewarePipe([
+        $collection = new MiddlewareCollection([
             new ServerTiming
         ]);
-        $response = $pipe->dispatch($request, $default);
+        $response = $collection->dispatch($request, $default);
 
         $header = $response->getHeader("Server-Timing")[0];
         $regex = "/Bootstrap=[0-9\.]+, Process=[0-9\.]+, Total=[0-9\.]+/";
