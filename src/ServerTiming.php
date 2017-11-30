@@ -19,7 +19,7 @@ use Interop\Http\Server\MiddlewareInterface;
 use Interop\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Tuupola\Middleware\ServerTiming\CallableDelegate;
+use Tuupola\Middleware\ServerTiming\CallableHandler;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 use Tuupola\Middleware\ServerTiming\StopwatchInterface;
 
@@ -48,7 +48,7 @@ class ServerTiming implements MiddlewareInterface
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        return $this->process($request, new CallableDelegate($next, $response));
+        return $this->process($request, new CallableHandler($next, $response));
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
