@@ -16,12 +16,6 @@
             "role": "Developer"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/tuupola/dispatch"
-        }
-    ],
     "require": {
         "php": "^5.5 || ^7.0",
         "symfony/stopwatch": "^3.0",
@@ -34,7 +28,7 @@
         "zendframework/zend-diactoros": "^1.3",
         "doctrine/dbal": "^2.0",
         "tuupola/http-factory": "^0.3.0",
-        "equip/dispatch": "dev-new-psr-15"
+        "equip/dispatch": "^1.0"
     },
     "autoload": {
         "psr-4": {
