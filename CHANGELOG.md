@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.6.0 - unreleased
+### Added
+- Support for the [latest version of PSR-15](https://github.com/http-interop/http-server-middleware).
+
+### Removed
+- Support for PHP 5.X was removed. PSR-15 is PHP 7.x only.
+
 ## 0.5.0 - 2017-07-30
 ### Added
 - StopwatchInterface to enable custom stopwatch implementations ([#3](https://github.com/tuupola/server-timing-middleware/pull/3)).
