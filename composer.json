@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": "^5.5 || ^7.0",
+        "php": "^7.0",
         "symfony/stopwatch": "^3.0",
         "http-interop/http-server-middleware": "^1.0"
     },
