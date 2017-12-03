@@ -15,11 +15,12 @@
 
 namespace Tuupola\Middleware;
 
-use Equip\Dispatch\MiddlewarePipe;
+use Equip\Dispatch\MiddlewareCollection;
+use Tuupola\Http\Factory\ServerRequestFactory;
+use Tuupola\Http\Factory\ResponseFactory;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
-use Zend\Diactoros\ServerRequest as Request;
-use Zend\Diactoros\Response;
-use Zend\Diactoros\Uri;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ServerTimingTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,13 +31,12 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldHandlePsr7()
     {
-        $request = (new Request())
-            ->withUri(new Uri("https://example.com/"))
-            ->withMethod("GET");
+        $request = (new ServerRequestFactory)
+            ->createServerRequest("GET", "https://example.com/");
 
-        $response = new Response;
+        $response = (new ResponseFactory)->createResponse();
 
-        $next = function (Request $request, Response $response) {
+        $next = function (ServerRequestInterface $request, ResponseInterface $response) {
             $response->getBody()->write("Success");
             return $response;
         };
@@ -54,26 +54,20 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldHandlePsr15()
     {
-        if (!class_exists("Equip\Dispatch\MiddlewarePipe")) {
-            $this->markTestSkipped(
-                "MiddlewarePipe class is not available."
-            );
-        }
+        $request = (new ServerRequestFactory)
+            ->createServerRequest("GET", "https://example.com/");
 
-        $request = (new Request())
-            ->withUri(new Uri("https://example.com/"))
-            ->withMethod("GET");
-
-        $default = function (Request $request) {
-            $response = new Response;
+        $default = function (ServerRequestInterface $request) {
+            $response = (new ResponseFactory)->createResponse();
             $response->getBody()->write("Success");
             return $response;
         };
 
-        $pipe = new MiddlewarePipe([
+        $collection = new MiddlewareCollection([
             new ServerTiming
         ]);
-        $response = $pipe->dispatch($request, $default);
+
+        $response = $collection->dispatch($request, $default);
 
         $header = $response->getHeader("Server-Timing")[0];
         $regex = "/Bootstrap=[0-9\.]+, Process=[0-9\.]+, Total=[0-9\.]+/";
@@ -86,13 +80,12 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
     /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
     public function testShouldGenerateValidToken()
     {
-        $request = (new Request())
-            ->withUri(new Uri("https://example.com/"))
-            ->withMethod("GET");
+        $request = (new ServerRequestFactory)
+            ->createServerRequest("GET", "https://example.com/");
 
-        $response = new Response;
+        $response = (new ResponseFactory)->createResponse();
 
-        $next = function (Request $request, Response $response) {
+        $next = function (ServerRequestInterface $request, ResponseInterface $response) {
             $response->getBody()->write("Success");
             return $response;
         };
