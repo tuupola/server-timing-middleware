@@ -85,7 +85,7 @@ Date: Tue, 07 Mar 2017 11:58:57 +0000
 Connection: close
 X-Powered-By: PHP/7.1.2
 Content-Type: text/html; charset=UTF-8
-Server-Timing: Bootstrap=0.008, externalapi=0.103; "External API", Magic=0.051, SQL=0.034, Process=0.396, Total=0.405
+Server-Timing: Bootstrap=9, externalapi=101; "External API", Magic=50, SQL=34, Process=360, Total=369
 Content-Length: 0
 ```
 
