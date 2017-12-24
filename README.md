@@ -7,8 +7,7 @@
 
 This middleware implements the [Server-Timing](http://wicg.github.io/server-timing/) header which can be used for displaying server side timing information on Chrome DevTools.
 
-![Server Timing](http://www.appelsiini.net/img/server-timing-1400.png)
-
+![Server Timing](https://appelsiini.net/img/server-timing-1400.png)
 
 ## Install
 
@@ -18,17 +17,39 @@ Install using [Composer](https://getcomposer.org/):
 $ composer require tuupola/server-timing-middleware
 ```
 
-## Usage
+## Simple usage
 
-Example below assumes you are using [Slim](https://www.slimframework.com/). Note that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate.
+To get the default timings add the middleware to the pipeline. With [Zend Expressive](https://github.com/zendframework/zend-expressive/) this goes go to the file named `config/pipeline.php`.
 
-By default the middleware adds three timings:
+```php
+$app->pipe(new Tuupola\Middleware\ServerTiming);
+```
+
+[Slim Framework](https://github.com/slimphp/Slim) does not dictate location of config files. Otherwise adding the middleware is almost identical with previous.
+
+```php
+$app->add(new Tuupola\Middleware\ServerTiming);
+```
+
+You should now see the default timings when doing a request.
 1. `Bootstrap` is the time taken from start of the request to execution of the first incoming middleware
 2. `Process` is the time taken for server to generate the response and process the middleware stack
 3. `Total` is the total time taken
 
-You can add your own timings by using the `Stopwatch` instance. See example below.
+```
+$ curl --include http://localhost:8080
 
+HTTP/1.1 200 OK
+Server-Timing: Bootstrap=54, Process=2, Total=58
+```
+
+Note that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate.
+
+## Advanced usage
+
+Example below uses [Slim Framework](https://github.com/slimphp/Slim). Note again that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate.
+
+You can add your own timings by using the `Stopwatch` instance. See example below.
 
 ```php
 require __DIR__ . "/vendor/autoload.php";
@@ -38,7 +59,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Tuupola\Middleware\ServerTiming;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 
-$app = new \Slim\App;
+$app = new Slim\App;
 $container = $app->getContainer();
 
 $container["stopwatch"] = function ($container) {
@@ -80,13 +101,7 @@ $app->run();
 $ curl --include http://0.0.0.0:8080/test
 
 HTTP/1.1 200 OK
-Host: 0.0.0.0:8080
-Date: Tue, 07 Mar 2017 11:58:57 +0000
-Connection: close
-X-Powered-By: PHP/7.1.2
-Content-Type: text/html; charset=UTF-8
 Server-Timing: Bootstrap=9, externalapi=101; "External API", Magic=50, SQL=34, Process=360, Total=369
-Content-Length: 0
 ```
 
 ## Usage with Doctrine DBAL
@@ -114,13 +129,11 @@ $connection->getConfiguration()->setSQLLogger($logger);
 
 ## Testing
 
-You can run tests either manually:
+You can run tests either manually or automatically on every code change. Automatic tests require [entr](http://entrproject.org/) to work.
 
 ``` bash
 $ make test
 ```
-Or automatically on every code change. This requires [entr](http://entrproject.org/) to work:
-
 ``` bash
 $ brew install entr
 $ make watch
