@@ -22,9 +22,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Tuupola\Middleware\ServerTiming\CallableHandler;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 use Tuupola\Middleware\ServerTiming\StopwatchInterface;
+use Tuupola\Middleware\DoublePassTrait;
 
 class ServerTiming implements MiddlewareInterface
 {
+    use DoublePassTrait;
+
     protected $stopwatch;
     private $start;
     private $bootstrap = "Bootstrap";
@@ -44,11 +47,6 @@ class ServerTiming implements MiddlewareInterface
             $stopwatch = new Stopwatch;
         }
         $this->stopwatch = $stopwatch;
-    }
-
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
-    {
-        return $this->process($request, new CallableHandler($next, $response));
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

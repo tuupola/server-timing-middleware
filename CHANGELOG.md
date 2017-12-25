@@ -2,9 +2,12 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [0.6.0](https://github.com/tuupola/server-timing-middleware/compare/0.5.0...0.6.0) - unreleased
+## [0.6.0-dev](https://github.com/tuupola/server-timing-middleware/compare/0.5.0...0.6.0) - unreleased
 ### Added
 - Support for the [latest version of PSR-15](https://github.com/http-interop/http-server-middleware).
+
+### Changed
+- PSR-7 double pass is now supported via [tuupola/callable-handler](https://github.com/tuupola/callable-handler) library.
 
 ### Removed
 -  PSR-15 is now PHP 7.x only. Support for PHP 5.X was removed.
