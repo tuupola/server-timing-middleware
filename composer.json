@@ -17,13 +17,13 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "symfony/stopwatch": "^3.0",
         "http-interop/http-server-middleware": "^1.0",
-        "tuupola/callable-handler": "^0.2.0"
+        "tuupola/callable-handler": "^0.2.0",
+        "phpunit/phpunit": "^6.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8",
         "squizlabs/php_codesniffer": "^2.5",
         "overtrue/phplint": "^0.2.0",
         "zendframework/zend-diactoros": "^1.3",
