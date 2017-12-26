@@ -24,7 +24,7 @@ use Tuupola\Middleware\ServerTiming\Stopwatch;
 use Tuupola\Middleware\ServerTiming\StopwatchInterface;
 use Tuupola\Middleware\DoublePassTrait;
 
-class ServerTiming implements MiddlewareInterface
+class ServerTimingMiddleware implements MiddlewareInterface
 {
     use DoublePassTrait;
 

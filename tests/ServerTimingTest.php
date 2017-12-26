@@ -41,7 +41,7 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
             return $response;
         };
 
-        $timing = new ServerTiming;
+        $timing = new ServerTimingMiddleware;
         $response = $timing($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
@@ -64,7 +64,7 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
         };
 
         $collection = new MiddlewareCollection([
-            new ServerTiming
+            new ServerTimingMiddleware
         ]);
 
         $response = $collection->dispatch($request, $default);
@@ -93,7 +93,7 @@ class ServerTimingTest extends \PHPUnit_Framework_TestCase
         $stopwatch = new Stopwatch;
         $stopwatch->set("DB Server", 100);
 
-        $timing = new ServerTiming($stopwatch);
+        $timing = new ServerTimingMiddleware($stopwatch);
         $response = $timing($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];

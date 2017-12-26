@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - Support for the [latest version of PSR-15](https://github.com/http-interop/http-server-middleware).
 
 ### Changed
+- Classname changed from ServerTiming to ServerTimingMiddleware.
 - PSR-7 double pass is now supported via [tuupola/callable-handler](https://github.com/tuupola/callable-handler) library.
 
 ### Removed

@@ -3,7 +3,7 @@
 [![Latest Version](https://img.shields.io/packagist/v/tuupola/server-timing-middleware.svg?style=flat-square)](https://packagist.org/packages/tuupola/server-timing-middleware)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/tuupola/server-timing-middleware/master.svg?style=flat-square)](https://travis-ci.org/tuupola/server-timing-middleware)
-[![Coverage](http://img.shields.io/codecov/c/github/tuupola/server-timing-middleware.svg?style=flat-square)](https://codecov.io/github/tuupola/server-timing-middleware)
+[![Coverage](https://img.shields.io/codecov/c/github/tuupola/server-timing-middleware.svg?style=flat-square)](https://codecov.io/github/tuupola/server-timing-middleware)
 
 This middleware implements the [Server-Timing](http://wicg.github.io/server-timing/) header which can be used for displaying server side timing information on Chrome DevTools.
 
@@ -22,13 +22,15 @@ $ composer require tuupola/server-timing-middleware
 To get the default timings add the middleware to the pipeline. With [Zend Expressive](https://github.com/zendframework/zend-expressive/) this goes go to the file named `config/pipeline.php`.
 
 ```php
-$app->pipe(new Tuupola\Middleware\ServerTiming);
+use Tuupola\Middleware\ServerTimingMiddleware;
+
+$app->pipe(ServerTimingMiddleware::class);
 ```
 
-[Slim Framework](https://github.com/slimphp/Slim) does not dictate location of config files. Otherwise adding the middleware is almost identical with previous.
+[Slim Framework](https://github.com/slimphp/Slim) does not dictate location of config files. Otherwise adding the middleware is similar with previous.
 
 ```php
-$app->add(new Tuupola\Middleware\ServerTiming);
+$app->add(new Tuupola\Middleware\ServerTimingMiddleware);
 ```
 
 You should now see the default timings when doing a request.
@@ -43,11 +45,11 @@ HTTP/1.1 200 OK
 Server-Timing: Bootstrap=54, Process=2, Total=58
 ```
 
-Note that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate.
+Note that `ServerTimingMiddleware` must be added as last middleware. Otherwise timings will be inaccurate.
 
 ## Advanced usage
 
-Example below uses [Slim Framework](https://github.com/slimphp/Slim). Note again that `ServerTiming` must be added as last middleware. Otherwise timings will be inaccurate.
+Example below uses [Slim Framework](https://github.com/slimphp/Slim). Note again that `ServerTimingMiddleware` must be added as last middleware. Otherwise timings will be inaccurate.
 
 You can add your own timings by using the `Stopwatch` instance. See example below.
 
@@ -56,7 +58,7 @@ require __DIR__ . "/vendor/autoload.php";
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Tuupola\Middleware\ServerTiming;
+use Tuupola\Middleware\ServerTimingMiddleware;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 $app = new Slim\App;
@@ -66,8 +68,8 @@ $container["stopwatch"] = function ($container) {
     return new Stopwatch;
 };
 
-$container["ServerTiming"] = function ($container) {
-    return new ServerTiming($container["stopwatch"]);
+$container["ServerTimingMiddleware"] = function ($container) {
+    return new ServerTimingMiddleware($container["stopwatch"]);
 };
 
 $container["DummyMiddleware"] = function ($container) {
@@ -78,7 +80,7 @@ $container["DummyMiddleware"] = function ($container) {
 };
 
 $app->add("DummyMiddleware");
-$app->add("ServerTiming");
+$app->add("ServerTimingMiddleware");
 
 $app->get("/test", function (Request $request, Response $response) {
     $this->stopwatch->start("External API");
@@ -106,7 +108,7 @@ Server-Timing: Bootstrap=9, externalapi=101; "External API", Magic=50, SQL=34, P
 
 ## Usage with Doctrine DBAL
 
-If you use Doctrine DBAL you can automate SQL query timings by using the provided `QueryTimer`. It implements the DBAL `SQLLogger` interface and can be used as standalone or in a `LoggerChain`. You must use the same `Stopwatch` instance with both `QueryTimer` and `ServerTiming` middleware.
+If you use Doctrine DBAL you can automate SQL query timings by using the provided `QueryTimer`. It implements the DBAL `SQLLogger` interface and can be used as standalone or in a `LoggerChain`. You must use the same `Stopwatch` instance with both `QueryTimer` and `ServerTimingMiddleware` middleware.
 
 ```php
 use Doctrine\DBAL\Logging\EchoSQLLogger;
