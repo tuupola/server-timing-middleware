@@ -37,11 +37,7 @@ class ServerTimingMiddleware implements MiddlewareInterface
     public function __construct(StopwatchInterface $stopwatch = null)
     {
         /* REQUEST_TIME_FLOAT is closer to truth. */
-        if (isset($_SERVER["REQUEST_TIME_FLOAT"])) {
-            $this->start = $_SERVER["REQUEST_TIME_FLOAT"];
-        } else {
-            $this->start = microtime(true);
-        }
+        $this->start = $_SERVER["REQUEST_TIME_FLOAT"] ?? microtime(true);
 
         if (null === $stopwatch) {
             $stopwatch = new Stopwatch;
