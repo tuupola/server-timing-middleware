@@ -75,7 +75,7 @@ class ServerTimingMiddleware implements MiddlewareInterface
         );
     }
 
-    private function generateHeader(array $values)
+    private function generateHeader(array $values): string
     {
         /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
         $regex = "/[^[:alnum:]!#$%&\'*\/+\-.^_`|~]/";

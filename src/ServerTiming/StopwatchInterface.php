@@ -16,24 +16,25 @@
 namespace Tuupola\Middleware\ServerTiming;
 
 use Closure;
+use Symfony\Component\Stopwatch\Stopwatch as SymfonyStopWatch;
 
 interface StopwatchInterface
 {
-    public function start($key);
+    public function start($key): StopwatchInterface;
 
-    public function stop($key);
+    public function stop($key): StopwatchInterface;
 
-    public function stopAll();
+    public function stopAll(): StopwatchInterface;
 
     public function closure($key, Closure $function = null);
 
-    public function set($key, $value = null);
+    public function set($key, $value = null): StopwatchInterface;
 
-    public function get($key);
+    public function get($key): ?int;
 
-    public function stopwatch();
+    public function stopwatch(): SymfonyStopWatch;
 
-    public function memory();
+    public function memory(): ?int;
 
-    public function values();
+    public function values(): array;
 }

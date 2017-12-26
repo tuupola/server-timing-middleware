@@ -26,12 +26,12 @@ class QueryTimer implements SQLLogger
         $this->stopwatch = $stopwatch;
     }
 
-    public function startQuery($sql, array $params = null, array $types = null)
+    public function startQuery($sql, array $params = null, array $types = null): void
     {
         $this->stopwatch->start("SQL");
     }
 
-    public function stopQuery()
+    public function stopQuery(): void
     {
         $this->stopwatch->stop("SQL");
     }
