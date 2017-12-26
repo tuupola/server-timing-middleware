@@ -1,12 +1,17 @@
 <?php
 
+/*
+To test:
+
+$ php -S 0.0.0:8081 index.php
+$ curl http://localhost:8081/test --include
+*/
+
 require __DIR__ . "/vendor/autoload.php";
-require __DIR__ . "/../src/ServerTiming.php";
-require __DIR__ . "/../src/ServerTiming/StopWatch.php";
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Tuupola\Middleware\ServerTiming;
+use Tuupola\Middleware\ServerTimingMiddleware;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 $app = new \Slim\App;
@@ -16,8 +21,8 @@ $container["stopwatch"] = function ($container) {
     return new Stopwatch;
 };
 
-$container["ServerTiming"] = function ($container) {
-    return new ServerTiming($container["stopwatch"]);
+$container["ServerTimingMiddleware"] = function ($container) {
+    return new ServerTimingMiddleware($container["stopwatch"]);
 };
 
 $container["DummyMiddleware"] = function ($container) {
@@ -28,7 +33,7 @@ $container["DummyMiddleware"] = function ($container) {
 };
 
 $app->add("DummyMiddleware");
-$app->add("ServerTiming");
+$app->add("ServerTimingMiddleware");
 
 $app->get("/test", function (Request $request, Response $response) {
     $this->stopwatch->start("External API");
