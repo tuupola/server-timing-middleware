@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the server timing middleware
+ * This file is part of server timing middleware
  *
  * Copyright (c) 2017 Mika Tuupola
  *
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Project home:
+ * See also:
  *   https://github.com/tuupola/server-timing-middleware
+ *   https://w3c.github.io/server-timing/
  *
  */
 
