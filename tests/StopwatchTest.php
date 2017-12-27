@@ -8,16 +8,18 @@
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Project home:
+ * See also:
  *   https://github.com/tuupola/server-timing-middleware
+ *   https://w3c.github.io/server-timing/
  *
  */
 
 namespace Tuupola\Middleware;
 
+use PHPUnit\Framework\TestCase;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 
-class StopwatchTest extends \PHPUnit_Framework_TestCase
+class StopwatchTest extends TestCase
 {
     public function testShouldBeTrue()
     {

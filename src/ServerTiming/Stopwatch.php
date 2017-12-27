@@ -8,8 +8,9 @@
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Project home:
+ * See also:
  *   https://github.com/tuupola/server-timing-middleware
+ *   https://w3c.github.io/server-timing/
  *
  */
 
@@ -30,14 +31,14 @@ class Stopwatch implements StopwatchInterface
         $this->stopwatch = new SymfonyStopWatch;
     }
 
-    public function start($key)
+    public function start($key): StopwatchInterface
     {
         $this->stopwatch->start($key);
         array_push($this->keys, $key);
         return $this;
     }
 
-    public function stop($key)
+    public function stop($key): StopwatchInterface
     {
         if ($this->stopwatch->isStarted($key)) {
             $event = $this->stopwatch->stop($key);
@@ -48,7 +49,7 @@ class Stopwatch implements StopwatchInterface
         return $this;
     }
 
-    public function stopAll()
+    public function stopAll(): StopwatchInterface
     {
         foreach ($this->keys as $key) {
             $this->stop($key);
@@ -64,7 +65,7 @@ class Stopwatch implements StopwatchInterface
         return $return;
     }
 
-    public function set($key, $value = null)
+    public function set($key, $value = null): StopwatchInterface
     {
         /* Allow calling $timing->set("fly", function () {...}) */
         if ($value instanceof Closure) {
@@ -75,7 +76,7 @@ class Stopwatch implements StopwatchInterface
         return $this;
     }
 
-    public function get($key)
+    public function get($key): ?int
     {
         if (isset($this->values[$key])) {
             return $this->values[$key];
@@ -83,17 +84,17 @@ class Stopwatch implements StopwatchInterface
         return null;
     }
 
-    public function stopwatch()
+    public function stopwatch(): SymfonyStopWatch
     {
         return $this->stopwatch;
     }
 
-    public function memory()
+    public function memory(): ?int
     {
         return $this->memory;
     }
 
-    public function values()
+    public function values(): array
     {
         return $this->values;
     }

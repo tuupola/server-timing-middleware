@@ -8,21 +8,23 @@
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Project home:
+ * See also:
  *   https://github.com/tuupola/server-timing-middleware
+ *   https://w3c.github.io/server-timing/
  *
  */
 
 namespace Tuupola\Middleware;
 
 use Equip\Dispatch\MiddlewareCollection;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use PHPUnit\Framework\TestCase;
 use Tuupola\Http\Factory\ServerRequestFactory;
 use Tuupola\Http\Factory\ResponseFactory;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
-class ServerTimingTest extends \PHPUnit_Framework_TestCase
+class ServerTimingTest extends TestCase
 {
     public function testShouldBeTrue()
     {

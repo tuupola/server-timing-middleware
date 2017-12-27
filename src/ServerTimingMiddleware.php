@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the server timing middleware
+ * This file is part of server timing middleware
  *
  * Copyright (c) 2017 Mika Tuupola
  *
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Project home:
+ * See also:
  *   https://github.com/tuupola/server-timing-middleware
+ *   https://w3c.github.io/server-timing/
  *
  */
 
@@ -37,11 +38,7 @@ class ServerTimingMiddleware implements MiddlewareInterface
     public function __construct(StopwatchInterface $stopwatch = null)
     {
         /* REQUEST_TIME_FLOAT is closer to truth. */
-        if (isset($_SERVER["REQUEST_TIME_FLOAT"])) {
-            $this->start = $_SERVER["REQUEST_TIME_FLOAT"];
-        } else {
-            $this->start = microtime(true);
-        }
+        $this->start = $_SERVER["REQUEST_TIME_FLOAT"] ?? microtime(true);
 
         if (null === $stopwatch) {
             $stopwatch = new Stopwatch;
@@ -79,7 +76,7 @@ class ServerTimingMiddleware implements MiddlewareInterface
         );
     }
 
-    private function generateHeader(array $values)
+    private function generateHeader(array $values): string
     {
         /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
         $regex = "/[^[:alnum:]!#$%&\'*\/+\-.^_`|~]/";
