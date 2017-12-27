@@ -25,11 +25,11 @@ use Tuupola\Middleware\ServerTiming\Stopwatch;
 use Tuupola\Middleware\ServerTiming\StopwatchInterface;
 use Tuupola\Middleware\DoublePassTrait;
 
-class ServerTimingMiddleware implements MiddlewareInterface
+final class ServerTimingMiddleware implements MiddlewareInterface
 {
     use DoublePassTrait;
 
-    protected $stopwatch;
+    private $stopwatch;
     private $start;
     private $bootstrap = "Bootstrap";
     private $process = "Process";

@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 - Classname changed from ServerTiming to ServerTimingMiddleware.
+- ServerTimingMiddleware is now declared final.
 - PSR-7 double pass is now supported via [tuupola/callable-handler](https://github.com/tuupola/callable-handler) library.
 - PHP 7.1 is now minimum requirement.
 
