@@ -99,10 +99,40 @@ class ServerTimingTest extends TestCase
         $response = $timing($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
-        $regex = '/^dbserver=100; "DB Server", Bootstrap=[0-9]+, Process=[0-9]+, Total=[0-9]+/';
+        $regexp = '/^dbserver=100; "DB Server", Bootstrap=[0-9]+, Process=[0-9]+, Total=[0-9]+/';
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
-        $this->assertTrue((boolean) preg_match($regex, $header));
+        $this->assertRegexp($regexp, $header);
+    }
+
+    public function testShouldAlterDefaults()
+    {
+        $request = (new ServerRequestFactory)
+            ->createServerRequest("GET", "https://example.com/");
+
+        $response = (new ResponseFactory)->createResponse();
+
+        $next = function (ServerRequestInterface $request, ResponseInterface $response) {
+            $response->getBody()->write("Success");
+            return $response;
+        };
+
+        $timing = new ServerTimingMiddleware(
+            new Stopwatch,
+            [
+                "bootstrap" => "Startup",
+                "process" => null,
+                "total" => "Sum"
+            ]
+        );
+        $response = $timing($request, $response, $next);
+
+        $header = $response->getHeader("Server-Timing")[0];
+        $regexp = '/^Startup=[0-9]+, Sum=[0-9]+/';
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("Success", $response->getBody());
+        $this->assertRegexp($regexp, $header);
     }
 }

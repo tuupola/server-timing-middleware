@@ -35,7 +35,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     private $process = "Process";
     private $total = "Total";
 
-    public function __construct(StopwatchInterface $stopwatch = null)
+    public function __construct(StopwatchInterface $stopwatch = null, array $options = [])
     {
         /* REQUEST_TIME_FLOAT is closer to truth. */
         $this->start = $_SERVER["REQUEST_TIME_FLOAT"] ?? microtime(true);
@@ -44,6 +44,9 @@ final class ServerTimingMiddleware implements MiddlewareInterface
             $stopwatch = new Stopwatch;
         }
         $this->stopwatch = $stopwatch;
+
+        /* Store passed in options overwriting any defaults. */
+        $this->hydrate($options);
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -91,5 +94,49 @@ final class ServerTimingMiddleware implements MiddlewareInterface
             }
         };
         return $header = preg_replace("/, $/", "", $header);
+    }
+
+    /**
+     * Hydrate all options from the given array.
+     */
+    private function hydrate(array $data = []): void
+    {
+        foreach ($data as $key => $value) {
+            /* https://github.com/facebook/hhvm/issues/6368 */
+            $key = str_replace(".", " ", $key);
+            $method = "set" . ucwords($key);
+            $method = str_replace(" ", "", $method);
+            if (method_exists($this, $method)) {
+                /* Try to use setter */
+                call_user_func([$this, $method], $value);
+            } else {
+                /* Or fallback to setting option directly */
+                $this->options[$key] = $value;
+            }
+        }
+    }
+
+    /**
+     * Set description for bootstrap or null to disable.
+     */
+    private function setBootstrap(?string $bootstrap): void
+    {
+        $this->bootstrap = $bootstrap;
+    }
+
+    /**
+     * Set description for process or null to disable.
+     */
+    private function setProcess(?string $process): void
+    {
+        $this->process = $process;
+    }
+
+    /**
+     * Set description for total or null to disable.
+     */
+    private function setTotal(?string $total): void
+    {
+        $this->total = $total;
     }
 }

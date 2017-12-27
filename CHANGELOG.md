@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file, in reverse 
 ## [0.6.0-dev](https://github.com/tuupola/server-timing-middleware/compare/0.5.0...0.6.0) - unreleased
 ### Added
 - Support for the [latest version of PSR-15](https://github.com/http-interop/http-server-middleware).
+- Possibility to rename or disable default timings via options array.
+    ```php
+    $app->add(new ServerTimingMiddleware($stopwatch, [
+        "bootstrap" => "Startup",
+        "process" => null,
+        "total" => "Sum"
+    ]);
+    ````
 
 ### Changed
 - Classname changed from ServerTiming to ServerTimingMiddleware.

@@ -47,6 +47,31 @@ Server-Timing: Bootstrap=54, Process=2, Total=58
 
 Note that `ServerTimingMiddleware` must be added as last middleware. Otherwise timings will be inaccurate.
 
+## Changing the defaults
+
+If you are not happy with the above you can change the description by using an optional settings array. To disable any of the defaults set the descriptins as `null`.
+
+```php
+use Tuupola\Middleware\ServerTimingMiddleware;
+use Tuupola\Middleware\ServerTiming\Stopwatch;
+
+$app->add(new ServerTimingMiddleware(
+    new Stopwatch,
+    [
+        "bootstrap" => "Startup",
+        "process" => null,
+        "total" => "Sum"
+    ])
+);
+```
+
+```
+$ curl --include http://localhost:8080
+
+HTTP/1.1 200 OK
+Server-Timing: Startup=52, Sum=57
+```
+
 ## Advanced usage
 
 Example below uses [Slim Framework](https://github.com/slimphp/Slim). Note again that `ServerTimingMiddleware` must be added as last middleware. Otherwise timings will be inaccurate.
