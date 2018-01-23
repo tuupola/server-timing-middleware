@@ -16,11 +16,17 @@
             "role": "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git://github.com/tuupola/dispatch"
+        }
+    ],
     "require": {
         "php": "^7.1",
         "symfony/stopwatch": "^3.0",
-        "http-interop/http-server-middleware": "^1.0",
-        "tuupola/callable-handler": "^0.2.0"
+        "tuupola/callable-handler": "^0.3.0",
+        "psr/http-server-middleware": "^1.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^2.5",
@@ -28,7 +34,7 @@
         "zendframework/zend-diactoros": "^1.0",
         "doctrine/dbal": "^2.0",
         "tuupola/http-factory": "^0.3.0",
-        "equip/dispatch": "^1.0",
+        "equip/dispatch": "dev-approved-psr15 as 1.0.x-dev",
         "phpunit/phpunit": "^6.5"
     },
     "autoload": {
