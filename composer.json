@@ -19,7 +19,8 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git://github.com/tuupola/dispatch"
+            "url": "git://github.com/tuupola/dispatch",
+            "no-api": true
         }
     ],
     "require": {
