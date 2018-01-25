@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [0.7.0-dev](https://github.com/tuupola/server-timing-middleware/compare/0.6.0...master) - unreleased
+## [0.7.0](https://github.com/tuupola/server-timing-middleware/compare/0.6.0...0.7.0) - 2018-01-25
 ### Added
 - Support for the [approved version of PSR-15](https://github.com/php-fig/http-server-middleware).
 
