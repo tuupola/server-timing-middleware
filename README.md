@@ -42,7 +42,7 @@ You should now see the default timings when doing a request.
 $ curl --include http://localhost:8080
 
 HTTP/1.1 200 OK
-Server-Timing: Bootstrap=54, Process=2, Total=58
+Server-Timing: Bootstrap;dur=54, Process;dur=2, Total;dur=58
 ```
 
 Note that `ServerTimingMiddleware` must be added as last middleware. Otherwise timings will be inaccurate.
@@ -69,7 +69,7 @@ $app->add(new ServerTimingMiddleware(
 $ curl --include http://localhost:8080
 
 HTTP/1.1 200 OK
-Server-Timing: Startup=52, Sum=57
+Server-Timing: Startup;dur=52, Sum;dur=57
 ```
 
 ## Advanced usage
@@ -128,7 +128,7 @@ $app->run();
 $ curl --include http://0.0.0.0:8080/test
 
 HTTP/1.1 200 OK
-Server-Timing: Bootstrap=9, externalapi=101; "External API", Magic=50, SQL=34, Process=360, Total=369
+Server-Timing: Bootstrap;dur=9, externalapi;dur=101;desc="External API", Magic;dur=50, SQL;dur=34, Process;dur=360, Total;dur=369
 ```
 
 ## Usage with Doctrine DBAL
