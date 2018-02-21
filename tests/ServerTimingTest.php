@@ -47,7 +47,7 @@ class ServerTimingTest extends TestCase
         $response = $timing($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
-        $regex = "/Bootstrap=[0-9\.]+, Process=[0-9\.]+, Total=[0-9\.]+/";
+        $regex = "/Bootstrap;dur=[0-9\.]+, Process;dur=[0-9\.]+, Total;dur=[0-9\.]+/";
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
@@ -72,7 +72,7 @@ class ServerTimingTest extends TestCase
         $response = $collection->dispatch($request, $default);
 
         $header = $response->getHeader("Server-Timing")[0];
-        $regex = "/Bootstrap=[0-9\.]+, Process=[0-9\.]+, Total=[0-9\.]+/";
+        $regex = "/Bootstrap;dur=[0-9\.]+, Process;dur=[0-9\.]+, Total;dur=[0-9\.]+/";
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
@@ -99,7 +99,7 @@ class ServerTimingTest extends TestCase
         $response = $timing($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
-        $regexp = '/^dbserver=100; "DB Server", Bootstrap=[0-9]+, Process=[0-9]+, Total=[0-9]+/';
+        $regexp = '/^dbserver;dur=100;desc="DB Server", Bootstrap;dur=[0-9]+, Process;dur=[0-9]+, Total;dur=[0-9]+/';
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
@@ -129,7 +129,7 @@ class ServerTimingTest extends TestCase
         $response = $timing($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
-        $regexp = '/^Startup=[0-9]+, Sum=[0-9]+/';
+        $regexp = '/^Startup;dur=[0-9]+, Sum;dur=[0-9]+/';
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
