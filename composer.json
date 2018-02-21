@@ -16,13 +16,6 @@
             "role": "Developer"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/tuupola/dispatch",
-            "no-api": true
-        }
-    ],
     "config": {
         "sort-packages": true
     },
@@ -34,7 +27,7 @@
     },
     "require-dev": {
         "doctrine/dbal": "^2.0",
-        "equip/dispatch": "dev-approved-psr15 as 1.0.x-dev",
+        "equip/dispatch": "^2.0",
         "overtrue/phplint": "^0.2.0",
         "phpstan/phpstan": "^0.9.2",
         "phpunit/phpunit": "^6.5",
