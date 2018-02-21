@@ -33,9 +33,9 @@ static:
 watch:
 	find . -name "*.php" -not -path "./vendor/*" -o -name "*.json" -not -path "./vendor/*" | entr -c make test
 
-test: lint unit
+test: lint static unit
 
-travis: lint unit
+travis: lint static unit
 
 all: deps test
 
