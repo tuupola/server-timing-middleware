@@ -36,7 +36,8 @@
         "doctrine/dbal": "^2.0",
         "tuupola/http-factory": "^0.3.0",
         "equip/dispatch": "dev-approved-psr15 as 1.0.x-dev",
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^6.5",
+        "phpstan/phpstan": "^0.9.2"
     },
     "autoload": {
         "psr-4": {

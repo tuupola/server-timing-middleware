@@ -111,7 +111,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
                 call_user_func([$this, $method], $value);
             } else {
                 /* Or fallback to setting option directly */
-                $this->options[$key] = $value;
+                $this->{$key} = $value;
             }
         }
     }

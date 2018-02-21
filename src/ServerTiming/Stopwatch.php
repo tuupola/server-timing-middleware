@@ -26,7 +26,7 @@ class Stopwatch implements StopwatchInterface
     private $keys = [];
     private $values = [];
 
-    public function __construct($options = [])
+    public function __construct()
     {
         $this->stopwatch = new SymfonyStopWatch;
     }
