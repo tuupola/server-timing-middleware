@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [0.8.0-dev](https://github.com/tuupola/server-timing-middleware/compare/0.7.0...master) - unreleased
+## [0.8.0](https://github.com/tuupola/server-timing-middleware/compare/0.7.0...0.8.0) - 2018-04-24
 ### Changed
 - New header format as implemented in Chrome 66 ([#5](https://github.com/tuupola/server-timing-middleware/issues/5)) ([#8](https://github.com/tuupola/server-timing-middleware/pull/8))
 - Removed unused options from `Tuupola\Middleware\ServerTiming` constructor.
