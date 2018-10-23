@@ -27,7 +27,7 @@ use Tuupola\Middleware\ServerTimingMiddleware;
 $app->pipe(ServerTimingMiddleware::class);
 ```
 
-[Slim Framework](https://github.com/slimphp/Slim) does not dictate location of config files. Otherwise adding the middleware is similar with previous.
+[Slim Framework](https://github.com/slimphp/Slim) does not have specific config files. Otherwise adding the middleware is similar with previous.
 
 ```php
 $app->add(new Tuupola\Middleware\ServerTimingMiddleware);
