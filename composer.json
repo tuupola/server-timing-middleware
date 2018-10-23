@@ -23,7 +23,7 @@
         "php": "^7.1",
         "psr/http-server-middleware": "^1.0",
         "symfony/stopwatch": "^3.0",
-        "tuupola/callable-handler": "^0.3.0"
+        "tuupola/callable-handler": "^0.3.0|^1.0"
     },
     "require-dev": {
         "doctrine/dbal": "^2.0",
