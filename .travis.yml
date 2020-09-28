@@ -1,5 +1,3 @@
-sudo: false
-
 language: php
 
 php:
@@ -13,6 +11,8 @@ jobs:
     include:
     - php: nightly
       env: COMPOSER_ARGS="--no-interaction --ignore-platform-reqs"
+    allow_failures:
+        - php: nightly
 
 env:
     global:
