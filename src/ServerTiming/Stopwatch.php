@@ -37,9 +37,24 @@ use Symfony\Component\Stopwatch\Stopwatch as SymfonyStopWatch;
 
 class Stopwatch implements StopwatchInterface
 {
-    private $stopwatch = null;
+    /**
+     * @var SymfonyStopWatch
+     */
+    private $stopwatch;
+
+    /**
+     * @var int
+     */
     private $memory = null;
+
+    /**
+     * @var string[]
+     */
     private $keys = [];
+
+    /**
+     * @var float[]
+     */
     private $values = [];
 
     public function __construct()
@@ -47,14 +62,14 @@ class Stopwatch implements StopwatchInterface
         $this->stopwatch = new SymfonyStopWatch;
     }
 
-    public function start($key): StopwatchInterface
+    public function start(string $key): StopwatchInterface
     {
         $this->stopwatch->start($key);
         array_push($this->keys, $key);
         return $this;
     }
 
-    public function stop($key): StopwatchInterface
+    public function stop(string $key): StopwatchInterface
     {
         if ($this->stopwatch->isStarted($key)) {
             $event = $this->stopwatch->stop($key);
@@ -73,15 +88,17 @@ class Stopwatch implements StopwatchInterface
         return $this;
     }
 
-    public function closure($key, Closure $function = null)
+    public function closure(string $key, Closure $function): void
     {
         $this->start($key);
         $return = $function();
         $this->stop($key);
-        return $return;
     }
 
-    public function set($key, $value = null): StopwatchInterface
+    /**
+     * @param float|Closure $value
+     */
+    public function set(string $key, $value): StopwatchInterface
     {
         /* Allow calling $timing->set("fly", function () {...}) */
         if ($value instanceof Closure) {
@@ -92,7 +109,7 @@ class Stopwatch implements StopwatchInterface
         return $this;
     }
 
-    public function get($key): ?int
+    public function get(string $key): ?float
     {
         if (isset($this->values[$key])) {
             return $this->values[$key];
@@ -110,6 +127,9 @@ class Stopwatch implements StopwatchInterface
         return $this->memory;
     }
 
+    /**
+     * @return float[]
+     */
     public function values(): array
     {
         return $this->values;

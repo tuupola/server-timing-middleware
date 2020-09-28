@@ -36,9 +36,12 @@ use Doctrine\DBAL\Logging\SQLLogger;
 
 class QueryTimer implements SQLLogger
 {
+    /**
+     * @var StopwatchInterface
+     */
     public $stopwatch;
 
-    public function __construct(StopwatchInterface $stopwatch = null)
+    public function __construct(StopwatchInterface $stopwatch)
     {
         $this->stopwatch = $stopwatch;
     }
