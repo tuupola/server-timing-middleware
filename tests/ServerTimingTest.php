@@ -119,7 +119,7 @@ class ServerTimingTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
-        $this->assertMatchesRegularExpression($regexp, $header);
+        $this->assertRegexp($regexp, $header);
     }
 
     public function testShouldAlterDefaults()
@@ -149,6 +149,6 @@ class ServerTimingTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
-        $this->assertMatchesRegularExpression($regexp, $header);
+        $this->assertRegexp($regexp, $header);
     }
 }
