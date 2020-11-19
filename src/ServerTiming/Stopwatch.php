@@ -37,9 +37,24 @@ use Symfony\Component\Stopwatch\Stopwatch as SymfonyStopWatch;
 
 class Stopwatch implements StopwatchInterface
 {
-    private $stopwatch = null;
+    /**
+     * @var SymfonyStopWatch
+     */
+    private $stopwatch;
+
+    /**
+     * @var int
+     */
     private $memory = null;
+
+    /**
+     * @var string[]
+     */
     private $keys = [];
+
+    /**
+     * @var int[]
+     */
     private $values = [];
 
     public function __construct()
@@ -47,20 +62,20 @@ class Stopwatch implements StopwatchInterface
         $this->stopwatch = new SymfonyStopWatch;
     }
 
-    public function start($key): StopwatchInterface
+    public function start(string $key): StopwatchInterface
     {
         $this->stopwatch->start($key);
         array_push($this->keys, $key);
         return $this;
     }
 
-    public function stop($key): StopwatchInterface
+    public function stop(string $key): StopwatchInterface
     {
         if ($this->stopwatch->isStarted($key)) {
             $event = $this->stopwatch->stop($key);
             $duration = $event->getDuration();
             $this->memory = $event->getMemory();
-            $this->set($key, $duration);
+            $this->set($key, (int) $duration);
         }
         return $this;
     }
@@ -73,7 +88,10 @@ class Stopwatch implements StopwatchInterface
         return $this;
     }
 
-    public function closure($key, Closure $function = null)
+    /**
+     * @return mixed
+     */
+    public function closure(string $key, Closure $function)
     {
         $this->start($key);
         $return = $function();
@@ -81,7 +99,7 @@ class Stopwatch implements StopwatchInterface
         return $return;
     }
 
-    public function set($key, $value = null): StopwatchInterface
+    public function set(string $key, $value): StopwatchInterface
     {
         /* Allow calling $timing->set("fly", function () {...}) */
         if ($value instanceof Closure) {
@@ -92,7 +110,7 @@ class Stopwatch implements StopwatchInterface
         return $this;
     }
 
-    public function get($key): ?int
+    public function get(string $key): ?int
     {
         if (isset($this->values[$key])) {
             return $this->values[$key];
@@ -110,6 +128,9 @@ class Stopwatch implements StopwatchInterface
         return $this->memory;
     }
 
+    /**
+     * @return int[]
+     */
     public function values(): array
     {
         return $this->values;
