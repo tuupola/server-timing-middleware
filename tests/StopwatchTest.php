@@ -53,10 +53,10 @@ class StopwatchTest extends TestCase
     public function testShouldReturnFromClosure()
     {
         $stopwatch = new Stopwatch;
-        $value = $stopwatch->closure("number", function () {
-            return 27;
+        $value = $stopwatch->closure("name", function () {
+            return "Not sure?";
         });
-        $this->assertEquals(27, $value);
+        $this->assertEquals("Not sure?", $value);
     }
 
     public function testShouldSetClosure()
