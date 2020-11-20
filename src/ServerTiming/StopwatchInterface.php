@@ -37,21 +37,30 @@ use Symfony\Component\Stopwatch\Stopwatch as SymfonyStopWatch;
 
 interface StopwatchInterface
 {
-    public function start($key): StopwatchInterface;
+    public function start(string $key): StopwatchInterface;
 
-    public function stop($key): StopwatchInterface;
+    public function stop(string $key): StopwatchInterface;
 
     public function stopAll(): StopwatchInterface;
 
-    public function closure($key, Closure $function = null);
+    /**
+     * @return mixed
+     */
+    public function closure(string $key, Closure $function);
 
-    public function set($key, $value = null): StopwatchInterface;
+    /**
+     * @param int|Closure $value
+     */
+    public function set(string $key, $value): StopwatchInterface;
 
-    public function get($key): ?int;
+    public function get(string $key): ?int;
 
     public function stopwatch(): SymfonyStopWatch;
 
     public function memory(): ?int;
 
+    /**
+     * @return int[]
+     */
     public function values(): array;
 }

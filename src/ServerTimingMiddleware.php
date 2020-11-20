@@ -45,12 +45,34 @@ final class ServerTimingMiddleware implements MiddlewareInterface
 {
     use DoublePassTrait;
 
+    /**
+     * @var StopwatchInterface
+     */
     private $stopwatch;
+
+    /**
+     * @var float
+     */
     private $start;
+
+    /**
+     * @var string|null
+     */
     private $bootstrap = "Bootstrap";
+
+    /**
+     * @var string|null
+     */
     private $process = "Process";
+
+    /**
+     * @var string|null
+     */
     private $total = "Total";
 
+    /**
+     * @param mixed[] $options
+     */
     public function __construct(StopwatchInterface $stopwatch = null, array $options = [])
     {
         /* REQUEST_TIME_FLOAT is closer to truth. */
@@ -70,7 +92,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
         /* Time spent from starting the request to entering this middleware. */
         if ($this->bootstrap) {
             $bootstrap = (microtime(true) - $this->start) * 1000;
-            $this->stopwatch->set($this->bootstrap, $bootstrap);
+            $this->stopwatch->set($this->bootstrap, (int) $bootstrap);
         }
 
         /* Call all the other middlewares. */
@@ -85,7 +107,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
         /* Time spent from starting the request to exiting last middleware. */
         if ($this->total) {
             $total = (microtime(true) - $this->start) * 1000;
-            $this->stopwatch->set($this->total, (integer) $total);
+            $this->stopwatch->set($this->total, (int) $total);
         }
         $this->stopwatch->stopAll();
 
@@ -95,6 +117,9 @@ final class ServerTimingMiddleware implements MiddlewareInterface
         );
     }
 
+    /**
+     * @param int[] $values
+     */
     private function generateHeader(array $values): string
     {
         /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
@@ -103,17 +128,21 @@ final class ServerTimingMiddleware implements MiddlewareInterface
         foreach ($values as $description => $timing) {
             if (preg_match($regex, $description)) {
                 $token = preg_replace($regex, "", $description);
-                $token = strtolower(trim($token, "-"));
-                $header .= sprintf('%s;dur=%d;desc="%s", ', $token, $timing, $description);
+                if (null !== $token) {
+                    $token = strtolower(trim($token, "-"));
+                    $header .= sprintf('%s;dur=%d;desc="%s", ', $token, $timing, $description);
+                }
             } else {
                 $header .= sprintf("%s;dur=%d, ", $description, $timing);
             }
         };
-        return $header = preg_replace("/, $/", "", $header);
+        return $header = (string) preg_replace("/, $/", "", $header);
     }
 
     /**
      * Hydrate all options from the given array.
+     *
+     * @param mixed[] $data
      */
     private function hydrate(array $data = []): void
     {
@@ -124,6 +153,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
             $method = str_replace(" ", "", $method);
             if (method_exists($this, $method)) {
                 /* Try to use setter */
+                /** @phpstan-ignore-next-line */
                 call_user_func([$this, $method], $value);
             } else {
                 /* Or fallback to setting option directly */
