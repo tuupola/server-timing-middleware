@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [0.9.0](https://github.com/tuupola/cors-middleware/compare/0.8.2...master) - unreleased
+## [0.9.0](https://github.com/tuupola/cors-middleware/compare/0.8.2...0.9.0) - 2020-12-01
 
 ### Added
 - Allow installing with PHP 8 ([#11](https://github.com/tuupola/server-timing-middleware/pull/11)).
