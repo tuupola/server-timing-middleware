@@ -49,7 +49,7 @@ Note that `ServerTimingMiddleware` must be added as last middleware. Otherwise t
 
 ## Changing the defaults
 
-If you are not happy with the above you can change the description by using an optional settings array. To disable any of the defaults set the descriptins as `null`.
+If you are not happy with the above you can change the description by using an optional settings array. To disable any of the defaults set the description to `null`.
 
 ```php
 use Tuupola\Middleware\ServerTimingMiddleware;
