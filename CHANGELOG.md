@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [0.9.1](https://github.com/tuupola/server-timing-middleware/compare/0.9.0...0.9.1) - 2021-04-05
+
+### Fixed
+- Allow installing with with recent versions of symfony/stopwatch ([#15](https://github.com/tuupola/server-timing-middleware/pull/15)).
+
 ## [0.9.0](https://github.com/tuupola/server-timing-middleware/compare/0.8.2...0.9.0) - 2020-12-01
 
 ### Added
