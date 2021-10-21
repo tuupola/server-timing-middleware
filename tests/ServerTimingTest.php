@@ -42,11 +42,6 @@ use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 class ServerTimingTest extends TestCase
 {
-    public function testShouldBeTrue()
-    {
-        $this->assertTrue(true);
-    }
-
     public function testShouldHandlePsr7()
     {
         $request = (new ServerRequestFactory)
@@ -63,11 +58,12 @@ class ServerTimingTest extends TestCase
         $response = $timing($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
-        $regex = "/Bootstrap;dur=[0-9\.]+, Process;dur=[0-9\.]+, Total;dur=[0-9\.]+/";
+        $regexp = "/Bootstrap;dur=[0-9\.]+, Process;dur=[0-9\.]+, Total;dur=[0-9\.]+/";
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
-        $this->assertTrue((boolean) preg_match($regex, $header));
+        //$this->assertTrue((boolean) preg_match($regexp, $header));
+        $this->assertRegexp($regexp, $header);
     }
 
     public function testShouldHandlePsr15()
@@ -88,11 +84,12 @@ class ServerTimingTest extends TestCase
         $response = $collection->dispatch($request, $default);
 
         $header = $response->getHeader("Server-Timing")[0];
-        $regex = "/Bootstrap;dur=[0-9\.]+, Process;dur=[0-9\.]+, Total;dur=[0-9\.]+/";
+        $regexp = "/Bootstrap;dur=[0-9\.]+, Process;dur=[0-9\.]+, Total;dur=[0-9\.]+/";
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
-        $this->assertTrue((boolean) preg_match($regex, $header));
+        //$this->assertTrue((boolean) preg_match($regexp, $header));
+        $this->assertRegexp($regexp, $header);
     }
 
     /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
@@ -119,7 +116,9 @@ class ServerTimingTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
+        //$this->assertMatchesRegularExpression($regexp, $header);
         $this->assertRegexp($regexp, $header);
+        //$this->assertTrue((boolean) preg_match($regex, $header));
     }
 
     public function testShouldAlterDefaults()
@@ -149,6 +148,8 @@ class ServerTimingTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
+        //$this->assertMatchesRegularExpression($regexp, $header);
         $this->assertRegexp($regexp, $header);
+        //$this->assertTrue((boolean) preg_match($regexp, $header));
     }
 }
