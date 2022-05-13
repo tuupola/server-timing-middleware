@@ -4,12 +4,12 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## [0.10.0](https://github.com/tuupola/server-timing-middleware/compare/0.9.1...master) - unreleased
 
+### Added
+- Support for `symfony/stopwatch:^6.0` ([#20](https://github.com/tuupola/server-timing-middleware/pull/20)).
+
 ### Removed
 - Support for `symfony/stopwatch:^3.0` ([#20](https://github.com/tuupola/server-timing-middleware/pull/20)).
 - Support for `tuupola/callable-handler:^0.3.0` ([#20](https://github.com/tuupola/server-timing-middleware/pull/20)).
-
-### Added
-- Support for `symfony/stopwatch:^6.0` ([#20](https://github.com/tuupola/server-timing-middleware/pull/20)).
 
 ## [0.9.1](https://github.com/tuupola/server-timing-middleware/compare/0.9.0...0.9.1) - 2021-04-05
 
