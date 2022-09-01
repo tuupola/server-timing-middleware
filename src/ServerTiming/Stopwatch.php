@@ -45,7 +45,7 @@ class Stopwatch implements StopwatchInterface
     /**
      * @var int
      */
-    private $memory = null;
+    private $memory;
 
     /**
      * @var string[]
