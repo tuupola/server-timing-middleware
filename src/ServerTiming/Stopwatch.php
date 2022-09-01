@@ -65,7 +65,7 @@ class Stopwatch implements StopwatchInterface
     public function start(string $key): StopwatchInterface
     {
         $this->stopwatch->start($key);
-        array_push($this->keys, $key);
+        $this->keys[] = $key;
         return $this;
     }
 
