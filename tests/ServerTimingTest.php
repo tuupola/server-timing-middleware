@@ -42,20 +42,20 @@ use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 class ServerTimingTest extends TestCase
 {
-    public function testShouldHandlePsr7()
+    public function testShouldHandlePsr7(): void
     {
         $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
         $response = (new ResponseFactory())->createResponse();
 
-        $next = function (ServerRequestInterface $request, ResponseInterface $response) {
+        $next = function (ServerRequestInterface $serverRequest, ResponseInterface $response): \Psr\Http\Message\ResponseInterface {
             $response->getBody()->write("Success");
             return $response;
         };
 
-        $timing = new ServerTimingMiddleware();
-        $response = $timing($request, $response, $next);
+        $serverTimingMiddleware = new ServerTimingMiddleware();
+        $response = $serverTimingMiddleware($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
         $regexp = "/Bootstrap;dur=[0-9\.]+, Process;dur=[0-9\.]+, Total;dur=[0-9\.]+/";
@@ -66,22 +66,22 @@ class ServerTimingTest extends TestCase
         $this->assertRegexp($regexp, $header);
     }
 
-    public function testShouldHandlePsr15()
+    public function testShouldHandlePsr15(): void
     {
         $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
-        $default = function (ServerRequestInterface $request) {
+        $default = function (ServerRequestInterface $serverRequest): \Psr\Http\Message\ResponseInterface {
             $response = (new ResponseFactory())->createResponse();
             $response->getBody()->write("Success");
             return $response;
         };
 
-        $collection = new MiddlewareCollection([
+        $middlewareCollection = new MiddlewareCollection([
             new ServerTimingMiddleware(),
         ]);
 
-        $response = $collection->dispatch($request, $default);
+        $response = $middlewareCollection->dispatch($request, $default);
 
         $header = $response->getHeader("Server-Timing")[0];
         $regexp = "/Bootstrap;dur=[0-9\.]+, Process;dur=[0-9\.]+, Total;dur=[0-9\.]+/";
@@ -93,14 +93,14 @@ class ServerTimingTest extends TestCase
     }
 
     /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
-    public function testShouldGenerateValidToken()
+    public function testShouldGenerateValidToken(): void
     {
         $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
         $response = (new ResponseFactory())->createResponse();
 
-        $next = function (ServerRequestInterface $request, ResponseInterface $response) {
+        $next = function (ServerRequestInterface $serverRequest, ResponseInterface $response): \Psr\Http\Message\ResponseInterface {
             $response->getBody()->write("Success");
             return $response;
         };
@@ -108,8 +108,8 @@ class ServerTimingTest extends TestCase
         $stopwatch = new Stopwatch();
         $stopwatch->set("DB Server", 100);
 
-        $timing = new ServerTimingMiddleware($stopwatch);
-        $response = $timing($request, $response, $next);
+        $serverTimingMiddleware = new ServerTimingMiddleware($stopwatch);
+        $response = $serverTimingMiddleware($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
         $regexp = '/^dbserver;dur=100;desc="DB Server", Bootstrap;dur=[0-9]+, Process;dur=[0-9]+, Total;dur=[0-9]+/';
@@ -121,19 +121,19 @@ class ServerTimingTest extends TestCase
         //$this->assertTrue((boolean) preg_match($regex, $header));
     }
 
-    public function testShouldAlterDefaults()
+    public function testShouldAlterDefaults(): void
     {
         $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
         $response = (new ResponseFactory())->createResponse();
 
-        $next = function (ServerRequestInterface $request, ResponseInterface $response) {
+        $next = function (ServerRequestInterface $serverRequest, ResponseInterface $response): \Psr\Http\Message\ResponseInterface {
             $response->getBody()->write("Success");
             return $response;
         };
 
-        $timing = new ServerTimingMiddleware(
+        $serverTimingMiddleware = new ServerTimingMiddleware(
             new Stopwatch(),
             [
                 "bootstrap" => "Startup",
@@ -141,7 +141,7 @@ class ServerTimingTest extends TestCase
                 "total" => "Sum",
             ]
         );
-        $response = $timing($request, $response, $next);
+        $response = $serverTimingMiddleware($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
         $regexp = '/^Startup;dur=[0-9]+, Sum;dur=[0-9]+/';

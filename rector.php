@@ -16,11 +16,11 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->sets([
         LevelSetList::UP_TO_PHP_72,
-        // SetList::CODE_QUALITY,
-        // SetList::DEAD_CODE,
+        SetList::CODE_QUALITY,
+        SetList::DEAD_CODE,
         // SetList::PRIVATIZATION,
-        // SetList::NAMING,
-        // SetList::TYPE_DECLARATION,
+        SetList::NAMING,
+        SetList::TYPE_DECLARATION,
         // SetList::EARLY_RETURN,
         // SetList::TYPE_DECLARATION_STRICT,
         // PHPUnitSetList::PHPUNIT_CODE_QUALITY,
