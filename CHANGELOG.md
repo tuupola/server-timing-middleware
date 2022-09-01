@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+
+## [0.11.0](https://github.com/tuupola/server-timing-middleware/compare/0.10.0...master) - unreleased
+
+### Changed
+- PHP 7.2 is now minimum requirement ([#21](https://github.com/tuupola/server-timing-middleware/pull/21)).
+
 ## [0.10.0](https://github.com/tuupola/server-timing-middleware/compare/0.9.1...0.10.0) - 2022-05-13
 
 ### Added

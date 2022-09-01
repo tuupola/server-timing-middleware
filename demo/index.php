@@ -9,16 +9,16 @@ $ curl http://localhost:8081/test --include
 
 require __DIR__ . "/vendor/autoload.php";
 
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Tuupola\Middleware\ServerTimingMiddleware;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
+use Tuupola\Middleware\ServerTimingMiddleware;
 
-$app = new \Slim\App;
+$app = new \Slim\App();
 $container = $app->getContainer();
 
 $container["stopwatch"] = function ($container) {
-    return new Stopwatch;
+    return new Stopwatch();
 };
 
 $container["ServerTimingMiddleware"] = function ($container) {

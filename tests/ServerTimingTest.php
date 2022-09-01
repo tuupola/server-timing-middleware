@@ -33,28 +33,28 @@ SOFTWARE.
 namespace Tuupola\Middleware;
 
 use Equip\Dispatch\MiddlewareCollection;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use PHPUnit\Framework\TestCase;
-use Tuupola\Http\Factory\ServerRequestFactory;
 use Tuupola\Http\Factory\ResponseFactory;
+use Tuupola\Http\Factory\ServerRequestFactory;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 class ServerTimingTest extends TestCase
 {
     public function testShouldHandlePsr7()
     {
-        $request = (new ServerRequestFactory)
+        $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
-        $response = (new ResponseFactory)->createResponse();
+        $response = (new ResponseFactory())->createResponse();
 
         $next = function (ServerRequestInterface $request, ResponseInterface $response) {
             $response->getBody()->write("Success");
             return $response;
         };
 
-        $timing = new ServerTimingMiddleware;
+        $timing = new ServerTimingMiddleware();
         $response = $timing($request, $response, $next);
 
         $header = $response->getHeader("Server-Timing")[0];
@@ -68,17 +68,17 @@ class ServerTimingTest extends TestCase
 
     public function testShouldHandlePsr15()
     {
-        $request = (new ServerRequestFactory)
+        $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
         $default = function (ServerRequestInterface $request) {
-            $response = (new ResponseFactory)->createResponse();
+            $response = (new ResponseFactory())->createResponse();
             $response->getBody()->write("Success");
             return $response;
         };
 
         $collection = new MiddlewareCollection([
-            new ServerTimingMiddleware
+            new ServerTimingMiddleware(),
         ]);
 
         $response = $collection->dispatch($request, $default);
@@ -95,17 +95,17 @@ class ServerTimingTest extends TestCase
     /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
     public function testShouldGenerateValidToken()
     {
-        $request = (new ServerRequestFactory)
+        $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
-        $response = (new ResponseFactory)->createResponse();
+        $response = (new ResponseFactory())->createResponse();
 
         $next = function (ServerRequestInterface $request, ResponseInterface $response) {
             $response->getBody()->write("Success");
             return $response;
         };
 
-        $stopwatch = new Stopwatch;
+        $stopwatch = new Stopwatch();
         $stopwatch->set("DB Server", 100);
 
         $timing = new ServerTimingMiddleware($stopwatch);
@@ -123,10 +123,10 @@ class ServerTimingTest extends TestCase
 
     public function testShouldAlterDefaults()
     {
-        $request = (new ServerRequestFactory)
+        $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
-        $response = (new ResponseFactory)->createResponse();
+        $response = (new ResponseFactory())->createResponse();
 
         $next = function (ServerRequestInterface $request, ResponseInterface $response) {
             $response->getBody()->write("Success");
@@ -134,11 +134,11 @@ class ServerTimingTest extends TestCase
         };
 
         $timing = new ServerTimingMiddleware(
-            new Stopwatch,
+            new Stopwatch(),
             [
                 "bootstrap" => "Startup",
                 "process" => null,
-                "total" => "Sum"
+                "total" => "Sum",
             ]
         );
         $response = $timing($request, $response, $next);

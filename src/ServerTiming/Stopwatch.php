@@ -59,7 +59,7 @@ class Stopwatch implements StopwatchInterface
 
     public function __construct()
     {
-        $this->stopwatch = new SymfonyStopWatch;
+        $this->stopwatch = new SymfonyStopWatch();
     }
 
     public function start(string $key): StopwatchInterface
