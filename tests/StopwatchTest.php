@@ -73,7 +73,7 @@ class StopwatchTest extends TestCase
     {
         $stopwatch = new Stopwatch();
         $this->assertInstanceOf(
-            "Symfony\Component\Stopwatch\Stopwatch",
+            \Symfony\Component\Stopwatch\Stopwatch::class,
             $stopwatch->stopwatch()
         );
     }
