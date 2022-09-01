@@ -46,10 +46,10 @@ class QueryTimerTest extends TestCase
     public function testShouldStartAndStopQueryTimer()
     {
         $stopwatch = new Stopwatch();
-        $timer = new QueryTimer($stopwatch);
-        $timer->startQuery("SELECT * FROM brawndos");
+        $queryTimer = new QueryTimer($stopwatch);
+        $queryTimer->startQuery("SELECT * FROM brawndos");
         usleep(10000);
-        $timer->stopQuery();
+        $queryTimer->stopQuery();
         $this->assertArrayHasKey("SQL", $stopwatch->values());
     }
 }

@@ -87,7 +87,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
         $this->hydrate($options);
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    public function process(ServerRequestInterface $serverRequest, RequestHandlerInterface $requestHandler): ResponseInterface
     {
         /* Time spent from starting the request to entering this middleware. */
         if ($this->bootstrap) {
@@ -99,7 +99,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
         if ($this->process) {
             $this->stopwatch->start($this->process);
         }
-        $response = $handler->handle($request);
+        $response = $requestHandler->handle($serverRequest);
         if ($this->process) {
             $this->stopwatch->stop($this->process);
         }
