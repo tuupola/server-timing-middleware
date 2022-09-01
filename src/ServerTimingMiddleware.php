@@ -32,14 +32,14 @@ SOFTWARE.
 
 namespace Tuupola\Middleware;
 
-use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Tuupola\Middleware\DoublePassTrait;
 use Tuupola\Middleware\ServerTiming\CallableHandler;
 use Tuupola\Middleware\ServerTiming\Stopwatch;
 use Tuupola\Middleware\ServerTiming\StopwatchInterface;
-use Tuupola\Middleware\DoublePassTrait;
 
 final class ServerTimingMiddleware implements MiddlewareInterface
 {
@@ -79,7 +79,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
         $this->start = $_SERVER["REQUEST_TIME_FLOAT"] ?? microtime(true);
 
         if (null === $stopwatch) {
-            $stopwatch = new Stopwatch;
+            $stopwatch = new Stopwatch();
         }
         $this->stopwatch = $stopwatch;
 

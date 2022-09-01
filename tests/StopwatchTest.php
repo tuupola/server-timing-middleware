@@ -44,7 +44,7 @@ class StopwatchTest extends TestCase
 
     public function testShouldGetAndSetValues()
     {
-        $stopwatch = new Stopwatch;
+        $stopwatch = new Stopwatch();
         $this->assertNull($stopwatch->get("water"));
         $stopwatch->set("water", 100);
         $this->assertEquals(100, $stopwatch->get("water"));
@@ -52,7 +52,7 @@ class StopwatchTest extends TestCase
 
     public function testShouldReturnFromClosure()
     {
-        $stopwatch = new Stopwatch;
+        $stopwatch = new Stopwatch();
         $value = $stopwatch->closure("name", function () {
             return "Not sure?";
         });
@@ -61,7 +61,7 @@ class StopwatchTest extends TestCase
 
     public function testShouldSetClosure()
     {
-        $stopwatch = new Stopwatch;
+        $stopwatch = new Stopwatch();
         $this->assertNull($stopwatch->get("juice"));
         $stopwatch->set("juice", function () {
             usleep(50000);
@@ -71,7 +71,7 @@ class StopwatchTest extends TestCase
 
     public function testShouldGetSymfonyStopWatch()
     {
-        $stopwatch = new Stopwatch;
+        $stopwatch = new Stopwatch();
         $this->assertInstanceOf(
             "Symfony\Component\Stopwatch\Stopwatch",
             $stopwatch->stopwatch()
@@ -80,7 +80,7 @@ class StopwatchTest extends TestCase
 
     public function testShouldGetMemory()
     {
-        $stopwatch = new Stopwatch;
+        $stopwatch = new Stopwatch();
         $this->assertNull($stopwatch->memory());
         $stopwatch->start("run");
         $stopwatch->stop("run");

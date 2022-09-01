@@ -45,7 +45,7 @@ class QueryTimerTest extends TestCase
 
     public function testShouldStartAndStopQueryTimer()
     {
-        $stopwatch = new Stopwatch;
+        $stopwatch = new Stopwatch();
         $timer = new QueryTimer($stopwatch);
         $timer->startQuery("SELECT * FROM brawndos");
         usleep(10000);
