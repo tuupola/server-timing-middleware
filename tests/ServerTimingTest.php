@@ -78,7 +78,7 @@ class ServerTimingTest extends TestCase
         };
 
         $collection = new MiddlewareCollection([
-            new ServerTimingMiddleware
+            new ServerTimingMiddleware,
         ]);
 
         $response = $collection->dispatch($request, $default);
@@ -138,7 +138,7 @@ class ServerTimingTest extends TestCase
             [
                 "bootstrap" => "Startup",
                 "process" => null,
-                "total" => "Sum"
+                "total" => "Sum",
             ]
         );
         $response = $timing($request, $response, $next);
