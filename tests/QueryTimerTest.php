@@ -38,12 +38,12 @@ use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 class QueryTimerTest extends TestCase
 {
-    public function testShouldBeTrue()
+    public function testShouldBeTrue(): void
     {
         $this->assertTrue(true);
     }
 
-    public function testShouldStartAndStopQueryTimer()
+    public function testShouldStartAndStopQueryTimer(): void
     {
         $stopwatch = new Stopwatch();
         $queryTimer = new QueryTimer($stopwatch);

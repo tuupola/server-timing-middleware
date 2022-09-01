@@ -37,12 +37,12 @@ use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 class StopwatchTest extends TestCase
 {
-    public function testShouldBeTrue()
+    public function testShouldBeTrue(): void
     {
         $this->assertTrue(true);
     }
 
-    public function testShouldGetAndSetValues()
+    public function testShouldGetAndSetValues(): void
     {
         $stopwatch = new Stopwatch();
         $this->assertNull($stopwatch->get("water"));
@@ -50,26 +50,26 @@ class StopwatchTest extends TestCase
         $this->assertEquals(100, $stopwatch->get("water"));
     }
 
-    public function testShouldReturnFromClosure()
+    public function testShouldReturnFromClosure(): void
     {
         $stopwatch = new Stopwatch();
-        $value = $stopwatch->closure("name", function () {
+        $value = $stopwatch->closure("name", function (): string {
             return "Not sure?";
         });
         $this->assertEquals("Not sure?", $value);
     }
 
-    public function testShouldSetClosure()
+    public function testShouldSetClosure(): void
     {
         $stopwatch = new Stopwatch();
         $this->assertNull($stopwatch->get("juice"));
-        $stopwatch->set("juice", function () {
+        $stopwatch->set("juice", function (): void {
             usleep(50000);
         });
         $this->assertTrue($stopwatch->get("juice") > 0);
     }
 
-    public function testShouldGetSymfonyStopWatch()
+    public function testShouldGetSymfonyStopWatch(): void
     {
         $stopwatch = new Stopwatch();
         $this->assertInstanceOf(
@@ -78,7 +78,7 @@ class StopwatchTest extends TestCase
         );
     }
 
-    public function testShouldGetMemory()
+    public function testShouldGetMemory(): void
     {
         $stopwatch = new Stopwatch();
         $this->assertNull($stopwatch->memory());

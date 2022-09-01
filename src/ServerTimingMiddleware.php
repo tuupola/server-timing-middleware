@@ -51,7 +51,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     private $stopwatch;
 
     /**
-     * @var float
+     * @var mixed|float
      */
     private $start;
 

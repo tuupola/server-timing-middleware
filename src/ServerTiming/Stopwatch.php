@@ -43,7 +43,7 @@ class Stopwatch implements StopwatchInterface
     private $symfonyStopWatch;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $memory;
 

@@ -42,14 +42,14 @@ use Tuupola\Middleware\ServerTiming\Stopwatch;
 
 class ServerTimingTest extends TestCase
 {
-    public function testShouldHandlePsr7()
+    public function testShouldHandlePsr7(): void
     {
         $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
         $response = (new ResponseFactory())->createResponse();
 
-        $next = function (ServerRequestInterface $serverRequest, ResponseInterface $response) {
+        $next = function (ServerRequestInterface $serverRequest, ResponseInterface $response): \Psr\Http\Message\ResponseInterface {
             $response->getBody()->write("Success");
             return $response;
         };
@@ -66,12 +66,12 @@ class ServerTimingTest extends TestCase
         $this->assertRegexp($regexp, $header);
     }
 
-    public function testShouldHandlePsr15()
+    public function testShouldHandlePsr15(): void
     {
         $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
-        $default = function (ServerRequestInterface $serverRequest) {
+        $default = function (ServerRequestInterface $serverRequest): \Psr\Http\Message\ResponseInterface {
             $response = (new ResponseFactory())->createResponse();
             $response->getBody()->write("Success");
             return $response;
@@ -93,14 +93,14 @@ class ServerTimingTest extends TestCase
     }
 
     /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
-    public function testShouldGenerateValidToken()
+    public function testShouldGenerateValidToken(): void
     {
         $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
         $response = (new ResponseFactory())->createResponse();
 
-        $next = function (ServerRequestInterface $serverRequest, ResponseInterface $response) {
+        $next = function (ServerRequestInterface $serverRequest, ResponseInterface $response): \Psr\Http\Message\ResponseInterface {
             $response->getBody()->write("Success");
             return $response;
         };
@@ -121,14 +121,14 @@ class ServerTimingTest extends TestCase
         //$this->assertTrue((boolean) preg_match($regex, $header));
     }
 
-    public function testShouldAlterDefaults()
+    public function testShouldAlterDefaults(): void
     {
         $request = (new ServerRequestFactory())
             ->createServerRequest("GET", "https://example.com/");
 
         $response = (new ResponseFactory())->createResponse();
 
-        $next = function (ServerRequestInterface $serverRequest, ResponseInterface $response) {
+        $next = function (ServerRequestInterface $serverRequest, ResponseInterface $response): \Psr\Http\Message\ResponseInterface {
             $response->getBody()->write("Success");
             return $response;
         };
