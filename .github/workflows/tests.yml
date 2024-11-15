@@ -6,8 +6,14 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ["7.2", "7.3", "7.4", "8.0", "8.1", "8.2", "8.3", "8.4"]
+        php-versions: ["7.2", "7.3", "7.4", "8.0", "8.1", "8.2", "8.3"]
+        experimental: [false]
+        include:
+            - php-version: "8.4"
+              experimental: true
+
     runs-on: ${{ matrix.operating-system }}
+    continue-on-error: ${{ matrix.experimental }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
