@@ -1,0 +1,5 @@
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+    	- '#Method Tuupola\\Middleware\\ServerTimingMiddleware.*is unused#'
+
