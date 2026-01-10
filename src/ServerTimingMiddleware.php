@@ -1,19 +1,15 @@
 <?php
 
 /*
-
 Copyright (c) 2017-2022 Mika Tuupola
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,8 +17,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-*/
+ */
 
 /**
  * @see       https://github.com/tuupola/server-timing-middleware
@@ -73,10 +68,12 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     /**
      * @param mixed[] $options
      */
-    public function __construct(StopwatchInterface $stopwatch = null, array $options = [])
+    public function __construct(?StopwatchInterface $stopwatch = null, array $options = [])
     {
         /* REQUEST_TIME_FLOAT is closer to truth. */
-        $this->start = $_SERVER["REQUEST_TIME_FLOAT"] ?? microtime(true);
+        $this->start = is_float($_SERVER["REQUEST_TIME_FLOAT"] ?? null)
+         ? $_SERVER["REQUEST_TIME_FLOAT"]
+          : microtime(true);
 
         if (null === $stopwatch) {
             $stopwatch = new Stopwatch();
@@ -126,8 +123,8 @@ final class ServerTimingMiddleware implements MiddlewareInterface
         $regex = "/[^[:alnum:]!#$%&\'*\/+\-.^_`|~]/";
         $header = "";
         foreach ($values as $description => $timing) {
-            if (preg_match($regex, $description)) {
-                $token = preg_replace($regex, "", $description);
+            if (preg_match($regex, (string) $description)) {
+                $token = preg_replace($regex, "", (string) $description);
                 if (null !== $token) {
                     $token = strtolower(trim($token, "-"));
                     $header .= sprintf('%s;dur=%d;desc="%s", ', $token, $timing, $description);
@@ -165,7 +162,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     /**
      * Set description for bootstrap or null to disable.
      */
-    private function setBootstrap(?string $bootstrap): void
+    private function setBootstrap(?string $bootstrap): void // @phpstan-ignore method.unused
     {
         $this->bootstrap = $bootstrap;
     }
@@ -173,7 +170,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     /**
      * Set description for process or null to disable.
      */
-    private function setProcess(?string $process): void
+    private function setProcess(?string $process): void // @phpstan-ignore method.unused
     {
         $this->process = $process;
     }
@@ -181,7 +178,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     /**
      * Set description for total or null to disable.
      */
-    private function setTotal(?string $total): void
+    private function setTotal(?string $total): void // @phpstan-ignore method.unused
     {
         $this->total = $total;
     }

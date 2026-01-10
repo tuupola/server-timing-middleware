@@ -27,35 +27,27 @@ SOFTWARE.
 
 namespace Tuupola\Middleware\ServerTiming;
 
-use Closure;
-use Symfony\Component\Stopwatch\Stopwatch as SymfonyStopWatch;
+use Doctrine\DBAL\Driver\Middleware\AbstractStatementMiddleware;
+use Doctrine\DBAL\Driver\Result as DriverResult;
+use Doctrine\DBAL\Driver\Statement as DriverStatement;
+use Doctrine\DBAL\ParameterType;
 
-interface StopwatchInterface
+class QueryTimerStatement extends AbstractStatementMiddleware
 {
-    public function start(string $key): StopwatchInterface;
+    public function __construct(
+        DriverStatement $statement,
+        private readonly StopwatchInterface $stopwatch
+    ) {
+        parent::__construct($statement);
+    }
 
-    public function stop(string $key): StopwatchInterface;
-
-    public function stopAll(): StopwatchInterface;
-
-    /**
-     * @return mixed
-     */
-    public function closure(string $key, Closure $function);
-
-    /**
-     * @param int|Closure $value
-     */
-    public function set(string $key, $value): StopwatchInterface;
-
-    public function get(string $key): ?int;
-
-    public function stopwatch(): SymfonyStopWatch;
-
-    public function memory(): ?int;
-
-    /**
-     * @return int[]
-     */
-    public function values(): array;
+    public function execute(): DriverResult
+    {
+        $this->stopwatch->start("SQL");
+        try {
+            return parent::execute();
+        } finally {
+            $this->stopwatch->stop("SQL");
+        }
+    }
 }

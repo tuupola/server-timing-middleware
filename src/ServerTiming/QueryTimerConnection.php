@@ -27,35 +27,44 @@ SOFTWARE.
 
 namespace Tuupola\Middleware\ServerTiming;
 
-use Closure;
-use Symfony\Component\Stopwatch\Stopwatch as SymfonyStopWatch;
+use Doctrine\DBAL\Driver\Connection as DriverConnection;
+use Doctrine\DBAL\Driver\Middleware\AbstractConnectionMiddleware;
+use Doctrine\DBAL\Driver\Statement as DriverStatement;
 
-interface StopwatchInterface
+class QueryTimerConnection extends AbstractConnectionMiddleware
 {
-    public function start(string $key): StopwatchInterface;
+    public function __construct(
+        DriverConnection $connection,
+        private readonly StopwatchInterface $stopwatch
+    ) {
+        parent::__construct($connection);
+    }
 
-    public function stop(string $key): StopwatchInterface;
+    public function prepare(string $sql): DriverStatement
+    {
+        return new QueryTimerStatement(
+            parent::prepare($sql),
+            $this->stopwatch
+        );
+    }
 
-    public function stopAll(): StopwatchInterface;
+    public function query(string $sql): \Doctrine\DBAL\Driver\Result
+    {
+        $this->stopwatch->start("SQL");
+        try {
+            return parent::query($sql);
+        } finally {
+            $this->stopwatch->stop("SQL");
+        }
+    }
 
-    /**
-     * @return mixed
-     */
-    public function closure(string $key, Closure $function);
-
-    /**
-     * @param int|Closure $value
-     */
-    public function set(string $key, $value): StopwatchInterface;
-
-    public function get(string $key): ?int;
-
-    public function stopwatch(): SymfonyStopWatch;
-
-    public function memory(): ?int;
-
-    /**
-     * @return int[]
-     */
-    public function values(): array;
+    public function exec(string $sql): int|string
+    {
+        $this->stopwatch->start("SQL");
+        try {
+            return parent::exec($sql);
+        } finally {
+            $this->stopwatch->stop("SQL");
+        }
+    }
 }

@@ -33,7 +33,7 @@ rector-fix: vendor
 	vendor/bin/ecs check src tests --fix
 
 unit: vendor
-	phpdbg -qrr vendor/bin/phpunit --testdox --coverage-text --coverage-clover=coverage.xml --coverage-html=./report/
+	XDEBUG_MODE=coverage vendor/bin/phpunit --testdox --coverage-text --coverage-clover=coverage.xml --coverage-html=./report/
 
 static: vendor
 	vendor/bin/phpstan analyse src --level max
