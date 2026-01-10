@@ -34,15 +34,11 @@ use Doctrine\DBAL\ParameterType;
 
 class QueryTimerStatement extends AbstractStatementMiddleware
 {
-    /**
-     * @var StopwatchInterface
-     */
-    private $stopwatch;
-
-    public function __construct(DriverStatement $statement, StopwatchInterface $stopwatch)
-    {
+    public function __construct(
+        DriverStatement $statement,
+        private readonly StopwatchInterface $stopwatch
+    ) {
         parent::__construct($statement);
-        $this->stopwatch = $stopwatch;
     }
 
     public function execute(): DriverResult

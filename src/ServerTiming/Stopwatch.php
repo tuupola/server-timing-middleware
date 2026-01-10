@@ -107,10 +107,7 @@ class Stopwatch implements StopwatchInterface
 
     public function get(string $key): ?int
     {
-        if (isset($this->values[$key])) {
-            return $this->values[$key];
-        }
-        return null;
+        return $this->values[$key] ?? null;
     }
 
     public function stopwatch(): SymfonyStopWatch

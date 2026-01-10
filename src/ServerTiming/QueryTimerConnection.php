@@ -33,15 +33,11 @@ use Doctrine\DBAL\Driver\Statement as DriverStatement;
 
 class QueryTimerConnection extends AbstractConnectionMiddleware
 {
-    /**
-     * @var StopwatchInterface
-     */
-    private $stopwatch;
-
-    public function __construct(DriverConnection $connection, StopwatchInterface $stopwatch)
-    {
+    public function __construct(
+        DriverConnection $connection,
+        private readonly StopwatchInterface $stopwatch
+    ) {
         parent::__construct($connection);
-        $this->stopwatch = $stopwatch;
     }
 
     public function prepare(string $sql): DriverStatement

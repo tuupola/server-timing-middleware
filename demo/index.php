@@ -16,20 +16,14 @@ use Tuupola\Middleware\ServerTimingMiddleware;
 $app = new \Slim\App();
 $container = $app->getContainer();
 
-$container["stopwatch"] = function ($container) {
-    return new Stopwatch();
-};
+$container["stopwatch"] = (fn ($container) => new Stopwatch());
 
-$container["ServerTimingMiddleware"] = function ($container) {
-    return new ServerTimingMiddleware($container["stopwatch"]);
-};
+$container["ServerTimingMiddleware"] = (fn ($container) => new ServerTimingMiddleware($container["stopwatch"]));
 
-$container["DummyMiddleware"] = function ($container) {
-    return function ($request, $response, $next) {
-        usleep(200000);
-        return $next($request, $response);
-    };
-};
+$container["DummyMiddleware"] = (fn ($container) => function ($request, $response, $next) {
+    usleep(200000);
+    return $next($request, $response);
+});
 
 $app->add("DummyMiddleware");
 $app->add("ServerTimingMiddleware");

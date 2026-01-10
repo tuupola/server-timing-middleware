@@ -71,7 +71,9 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     public function __construct(?StopwatchInterface $stopwatch = null, array $options = [])
     {
         /* REQUEST_TIME_FLOAT is closer to truth. */
-        $this->start = $_SERVER["REQUEST_TIME_FLOAT"] ?? microtime(true);
+        $this->start = is_float($_SERVER["REQUEST_TIME_FLOAT"] ?? null)
+         ? $_SERVER["REQUEST_TIME_FLOAT"]
+          : microtime(true);
 
         if (null === $stopwatch) {
             $stopwatch = new Stopwatch();
@@ -121,8 +123,8 @@ final class ServerTimingMiddleware implements MiddlewareInterface
         $regex = "/[^[:alnum:]!#$%&\'*\/+\-.^_`|~]/";
         $header = "";
         foreach ($values as $description => $timing) {
-            if (preg_match($regex, $description)) {
-                $token = preg_replace($regex, "", $description);
+            if (preg_match($regex, (string) $description)) {
+                $token = preg_replace($regex, "", (string) $description);
                 if (null !== $token) {
                     $token = strtolower(trim($token, "-"));
                     $header .= sprintf('%s;dur=%d;desc="%s", ', $token, $timing, $description);
@@ -160,7 +162,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     /**
      * Set description for bootstrap or null to disable.
      */
-    private function setBootstrap(?string $bootstrap): void
+    private function setBootstrap(?string $bootstrap): void // @phpstan-ignore method.unused
     {
         $this->bootstrap = $bootstrap;
     }
@@ -168,7 +170,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     /**
      * Set description for process or null to disable.
      */
-    private function setProcess(?string $process): void
+    private function setProcess(?string $process): void // @phpstan-ignore method.unused
     {
         $this->process = $process;
     }
@@ -176,7 +178,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     /**
      * Set description for total or null to disable.
      */
-    private function setTotal(?string $total): void
+    private function setTotal(?string $total): void // @phpstan-ignore method.unused
     {
         $this->total = $total;
     }

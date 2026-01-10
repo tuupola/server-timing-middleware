@@ -48,9 +48,7 @@ class StopwatchTest extends TestCase
     public function testShouldReturnFromClosure()
     {
         $stopwatch = new Stopwatch();
-        $value = $stopwatch->closure("name", function () {
-            return "Not sure?";
-        });
+        $value = $stopwatch->closure("name", fn () => "Not sure?");
         $this->assertEquals("Not sure?", $value);
     }
 
@@ -68,7 +66,7 @@ class StopwatchTest extends TestCase
     {
         $stopwatch = new Stopwatch();
         $this->assertInstanceOf(
-            "Symfony\Component\Stopwatch\Stopwatch",
+            \Symfony\Component\Stopwatch\Stopwatch::class,
             $stopwatch->stopwatch()
         );
     }

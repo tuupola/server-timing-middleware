@@ -31,21 +31,62 @@ use Doctrine\DBAL\Driver as DriverInterface;
 use Doctrine\DBAL\Driver\Connection as DriverConnection;
 use Doctrine\DBAL\Driver\Middleware\AbstractDriverMiddleware;
 
+/**
+ * @phpstan-type OverrideParams = array{
+ *     application_name?: string,
+ *     charset?: string,
+ *     dbname?: string,
+ *     defaultTableOptions?: array<string, mixed>,
+ *     driver?: key-of<\Doctrine\DBAL\DriverManager::DRIVER_MAP>,
+ *     driverClass?: class-string<\Doctrine\DBAL\Driver>,
+ *     driverOptions?: array<mixed>,
+ *     host?: string,
+ *     memory?: bool,
+ *     password?: string,
+ *     path?: string,
+ *     persistent?: bool,
+ *     port?: int,
+ *     serverVersion?: string,
+ *     sessionMode?: int,
+ *     user?: string,
+ *     unix_socket?: string,
+ *     wrapperClass?: class-string<\Doctrine\DBAL\Connection>,
+ * }
+ * @phpstan-type Params = array{
+ *     application_name?: string,
+ *     charset?: string,
+ *     dbname?: string,
+ *     defaultTableOptions?: array<string, mixed>,
+ *     driver?: key-of<\Doctrine\DBAL\DriverManager::DRIVER_MAP>,
+ *     driverClass?: class-string<\Doctrine\DBAL\Driver>,
+ *     driverOptions?: array<mixed>,
+ *     host?: string,
+ *     keepReplica?: bool,
+ *     memory?: bool,
+ *     password?: string,
+ *     path?: string,
+ *     persistent?: bool,
+ *     port?: int,
+ *     primary?: OverrideParams,
+ *     replica?: array<OverrideParams>,
+ *     serverVersion?: string,
+ *     sessionMode?: int,
+ *     user?: string,
+ *     wrapperClass?: class-string<\Doctrine\DBAL\Connection>,
+ *     unix_socket?: string,
+ * }
+ */
 class QueryTimerDriver extends AbstractDriverMiddleware
 {
-    /**
-     * @var StopwatchInterface
-     */
-    private $stopwatch;
-
-    public function __construct(DriverInterface $driver, StopwatchInterface $stopwatch)
-    {
+    public function __construct(
+        DriverInterface $driver,
+        private readonly StopwatchInterface $stopwatch
+    ) {
         parent::__construct($driver);
-        $this->stopwatch = $stopwatch;
     }
 
     /**
-     * @param mixed[] $params
+     * @param OverrideParams $params
      */
     public function connect(array $params): DriverConnection
     {
