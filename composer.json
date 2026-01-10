@@ -28,7 +28,7 @@
     "require-dev": {
         "doctrine/dbal": "^2.0",
         "equip/dispatch": "^2.0",
-        "laminas/laminas-diactoros": "^2.4",
+        "laminas/laminas-diactoros": "^2.4|^3.0",
         "overtrue/phplint": "^2.0",
         "phpstan/phpstan": "^1.8",
         "phpunit/phpunit": "^7.0|^8.0|^9.0",
