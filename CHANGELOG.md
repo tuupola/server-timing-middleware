@@ -2,11 +2,16 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-
 ## [0.11.0](https://github.com/tuupola/server-timing-middleware/compare/0.10.0...master) - unreleased
+
+### Added
+- Support for `symfony/stopwatch:^7.0` ([#28](https://github.com/tuupola/server-timing-middleware/pull/28)).
 
 ### Changed
 - PHP 7.2 is now minimum requirement ([#21](https://github.com/tuupola/server-timing-middleware/pull/21)).
+
+### Fixed
+- PHP 8.4 implicitly nullable parameter deprecation ([#29](https://github.com/tuupola/server-timing-middleware/pull/29)).
 
 ## [0.10.0](https://github.com/tuupola/server-timing-middleware/compare/0.9.1...0.10.0) - 2022-05-13
 
