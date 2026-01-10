@@ -73,7 +73,7 @@ final class ServerTimingMiddleware implements MiddlewareInterface
     /**
      * @param mixed[] $options
      */
-    public function __construct(StopwatchInterface $stopwatch = null, array $options = [])
+    public function __construct(?StopwatchInterface $stopwatch = null, array $options = [])
     {
         /* REQUEST_TIME_FLOAT is closer to truth. */
         $this->start = $_SERVER["REQUEST_TIME_FLOAT"] ?? microtime(true);
