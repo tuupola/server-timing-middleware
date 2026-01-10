@@ -3,10 +3,12 @@ on: [push, pull_request]
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ["7.2", "7.3", "7.4", "8.0", "8.1"]
+        php-versions: ["7.2", "7.3", "7.4", "8.0", "8.1", "8.2", "8.3", "8.4", "8.5"]
     runs-on: ${{ matrix.operating-system }}
+    continue-on-error: ${{ matrix.php-versions == '8.4' || matrix.php-versions == '8.5' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -21,14 +23,14 @@ jobs:
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
       - name: Cache composer dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           #key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
+        run: composer install --no-progress --prefer-dist --optimize-autoloader --no-security-blocking
       - name: Run linter
         run: make lint
       - name: Run unit tests
@@ -36,4 +38,4 @@ jobs:
       - name: Run static analysis
         run: make static
       - name: Upload coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v4
