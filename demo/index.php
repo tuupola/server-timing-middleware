@@ -2,10 +2,9 @@
 
 /*
 To test:
-
 $ php -S 0.0.0:8081 index.php
 $ curl http://localhost:8081/test --include
-*/
+ */
 
 require __DIR__ . "/vendor/autoload.php";
 
