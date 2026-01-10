@@ -1,0 +1,3 @@
+parameters:
+    ignoreErrors:
+        - '#Method Tuupola\\Middleware\\ServerTimingMiddleware::set(Bootstrap|Process|Total)\(\) is unused\.#'
