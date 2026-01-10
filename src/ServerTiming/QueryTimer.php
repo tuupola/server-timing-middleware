@@ -32,9 +32,19 @@ SOFTWARE.
 
 namespace Tuupola\Middleware\ServerTiming;
 
-use Doctrine\DBAL\Logging\SQLLogger;
+use Doctrine\DBAL\Driver as DriverInterface;
+use Doctrine\DBAL\Driver\Middleware as MiddlewareInterface;
 
-class QueryTimer implements SQLLogger
+/**
+ * DBAL Middleware for timing SQL queries.
+ *
+ * Usage with DBAL 3.x/4.x:
+ *
+ *     $stopwatch = new Stopwatch();
+ *     $config = new \Doctrine\DBAL\Configuration();
+ *     $config->setMiddlewares([new QueryTimer($stopwatch)]);
+ */
+class QueryTimer implements MiddlewareInterface
 {
     /**
      * @var StopwatchInterface
@@ -46,17 +56,8 @@ class QueryTimer implements SQLLogger
         $this->stopwatch = $stopwatch;
     }
 
-    /**
-     * @param mixed[] $params
-     * @param mixed[] $types
-     */
-    public function startQuery($sql, array $params = null, array $types = null): void
+    public function wrap(DriverInterface $driver): DriverInterface
     {
-        $this->stopwatch->start("SQL");
-    }
-
-    public function stopQuery(): void
-    {
-        $this->stopwatch->stop("SQL");
+        return new QueryTimerDriver($driver, $this->stopwatch);
     }
 }

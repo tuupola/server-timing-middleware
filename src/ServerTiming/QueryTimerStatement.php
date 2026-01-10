@@ -30,38 +30,33 @@ SOFTWARE.
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
 
-namespace Tuupola\Middleware;
+namespace Tuupola\Middleware\ServerTiming;
 
-use Doctrine\DBAL\Configuration;
-use Doctrine\DBAL\DriverManager;
-use PHPUnit\Framework\TestCase;
-use Tuupola\Middleware\ServerTiming\QueryTimer;
-use Tuupola\Middleware\ServerTiming\Stopwatch;
+use Doctrine\DBAL\Driver\Middleware\AbstractStatementMiddleware;
+use Doctrine\DBAL\Driver\Result as DriverResult;
+use Doctrine\DBAL\Driver\Statement as DriverStatement;
+use Doctrine\DBAL\ParameterType;
 
-class QueryTimerTest extends TestCase
+class QueryTimerStatement extends AbstractStatementMiddleware
 {
-    public function testShouldBeTrue(): void
+    /**
+     * @var StopwatchInterface
+     */
+    private $stopwatch;
+
+    public function __construct(DriverStatement $statement, StopwatchInterface $stopwatch)
     {
-        $this->assertTrue(true);
+        parent::__construct($statement);
+        $this->stopwatch = $stopwatch;
     }
 
-    public function testShouldTimeQueries(): void
+    public function execute(): DriverResult
     {
-        $stopwatch = new Stopwatch();
-        $timer = new QueryTimer($stopwatch);
-
-        $config = new Configuration();
-        $config->setMiddlewares([$timer]);
-
-        $connection = DriverManager::getConnection([
-            'driver' => 'pdo_sqlite',
-            'memory' => true,
-        ], $config);
-
-        $connection->executeQuery('SELECT 1');
-        usleep(10000);
-        $connection->executeQuery('SELECT 2');
-
-        $this->assertArrayHasKey("SQL", $stopwatch->values());
+        $this->stopwatch->start("SQL");
+        try {
+            return parent::execute();
+        } finally {
+            $this->stopwatch->stop("SQL");
+        }
     }
 }

@@ -5,27 +5,25 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ["7.2", "7.3", "7.4", "8.0", "8.1"]
+        php-versions: ["8.1", "8.2", "8.3", "8.4"]
     runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup PHP and extensions
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: gmp
           coverage: xdebug
-          #coverage: pcov
       - name: Set composer cache
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache composer dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          #key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
@@ -36,4 +34,4 @@ jobs:
       - name: Run static analysis
         run: make static
       - name: Upload coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v4

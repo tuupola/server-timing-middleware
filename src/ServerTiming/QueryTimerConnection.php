@@ -30,38 +30,50 @@ SOFTWARE.
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
 
-namespace Tuupola\Middleware;
+namespace Tuupola\Middleware\ServerTiming;
 
-use Doctrine\DBAL\Configuration;
-use Doctrine\DBAL\DriverManager;
-use PHPUnit\Framework\TestCase;
-use Tuupola\Middleware\ServerTiming\QueryTimer;
-use Tuupola\Middleware\ServerTiming\Stopwatch;
+use Doctrine\DBAL\Driver\Connection as DriverConnection;
+use Doctrine\DBAL\Driver\Middleware\AbstractConnectionMiddleware;
+use Doctrine\DBAL\Driver\Statement as DriverStatement;
 
-class QueryTimerTest extends TestCase
+class QueryTimerConnection extends AbstractConnectionMiddleware
 {
-    public function testShouldBeTrue(): void
+    /**
+     * @var StopwatchInterface
+     */
+    private $stopwatch;
+
+    public function __construct(DriverConnection $connection, StopwatchInterface $stopwatch)
     {
-        $this->assertTrue(true);
+        parent::__construct($connection);
+        $this->stopwatch = $stopwatch;
     }
 
-    public function testShouldTimeQueries(): void
+    public function prepare(string $sql): DriverStatement
     {
-        $stopwatch = new Stopwatch();
-        $timer = new QueryTimer($stopwatch);
+        return new QueryTimerStatement(
+            parent::prepare($sql),
+            $this->stopwatch
+        );
+    }
 
-        $config = new Configuration();
-        $config->setMiddlewares([$timer]);
+    public function query(string $sql): \Doctrine\DBAL\Driver\Result
+    {
+        $this->stopwatch->start("SQL");
+        try {
+            return parent::query($sql);
+        } finally {
+            $this->stopwatch->stop("SQL");
+        }
+    }
 
-        $connection = DriverManager::getConnection([
-            'driver' => 'pdo_sqlite',
-            'memory' => true,
-        ], $config);
-
-        $connection->executeQuery('SELECT 1');
-        usleep(10000);
-        $connection->executeQuery('SELECT 2');
-
-        $this->assertArrayHasKey("SQL", $stopwatch->values());
+    public function exec(string $sql): int|string
+    {
+        $this->stopwatch->start("SQL");
+        try {
+            return parent::exec($sql);
+        } finally {
+            $this->stopwatch->stop("SQL");
+        }
     }
 }

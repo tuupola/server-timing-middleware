@@ -62,8 +62,7 @@ class ServerTimingTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
-        //$this->assertTrue((boolean) preg_match($regexp, $header));
-        $this->assertRegexp($regexp, $header);
+        $this->assertMatchesRegularExpression($regexp, $header);
     }
 
     public function testShouldHandlePsr15()
@@ -88,8 +87,7 @@ class ServerTimingTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
-        //$this->assertTrue((boolean) preg_match($regexp, $header));
-        $this->assertRegexp($regexp, $header);
+        $this->assertMatchesRegularExpression($regexp, $header);
     }
 
     /* https://tools.ietf.org/html/rfc7230#section-3.2.6 */
@@ -116,9 +114,7 @@ class ServerTimingTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
-        //$this->assertMatchesRegularExpression($regexp, $header);
-        $this->assertRegexp($regexp, $header);
-        //$this->assertTrue((boolean) preg_match($regex, $header));
+        $this->assertMatchesRegularExpression($regexp, $header);
     }
 
     public function testShouldAlterDefaults()
@@ -148,8 +144,6 @@ class ServerTimingTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Success", $response->getBody());
-        //$this->assertMatchesRegularExpression($regexp, $header);
-        $this->assertRegexp($regexp, $header);
-        //$this->assertTrue((boolean) preg_match($regexp, $header));
+        $this->assertMatchesRegularExpression($regexp, $header);
     }
 }
