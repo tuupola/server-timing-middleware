@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [0.12.0](https://github.com/tuupola/server-timing-middleware/compare/0.11.0...master) - 2026-01-10
+## [0.12.0](https://github.com/tuupola/server-timing-middleware/compare/0.11.0...0.12.0) - 2026-01-10
 ### Added
 - Support for `symfony/stopwatch:^8.0` ([#33](https://github.com/tuupola/server-timing-middleware/pull/33)).
 
