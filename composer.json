@@ -22,7 +22,7 @@
     "require": {
         "php": "^8.1",
         "psr/http-server-middleware": "^1.0",
-        "symfony/stopwatch": "^4.0|^5.0|^6.0|^7.0",
+        "symfony/stopwatch": "^6.0|^7.0|^8.0",
         "tuupola/callable-handler": "^1.0"
     },
     "require-dev": {
