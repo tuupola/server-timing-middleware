@@ -40,12 +40,12 @@ class Stopwatch implements StopwatchInterface
     /**
      * @var SymfonyStopWatch
      */
-    private $stopwatch;
+    private $symfonyStopWatch;
 
     /**
-     * @var int
+     * @var int|null
      */
-    private $memory = null;
+    private $memory;
 
     /**
      * @var string[]
@@ -59,22 +59,22 @@ class Stopwatch implements StopwatchInterface
 
     public function __construct()
     {
-        $this->stopwatch = new SymfonyStopWatch();
+        $this->symfonyStopWatch = new SymfonyStopWatch();
     }
 
     public function start(string $key): StopwatchInterface
     {
-        $this->stopwatch->start($key);
-        array_push($this->keys, $key);
+        $this->symfonyStopWatch->start($key);
+        $this->keys[] = $key;
         return $this;
     }
 
     public function stop(string $key): StopwatchInterface
     {
-        if ($this->stopwatch->isStarted($key)) {
-            $event = $this->stopwatch->stop($key);
-            $duration = $event->getDuration();
-            $this->memory = $event->getMemory();
+        if ($this->symfonyStopWatch->isStarted($key)) {
+            $stopwatchEvent = $this->symfonyStopWatch->stop($key);
+            $duration = $stopwatchEvent->getDuration();
+            $this->memory = $stopwatchEvent->getMemory();
             $this->set($key, (int) $duration);
         }
         return $this;
@@ -120,7 +120,7 @@ class Stopwatch implements StopwatchInterface
 
     public function stopwatch(): SymfonyStopWatch
     {
-        return $this->stopwatch;
+        return $this->symfonyStopWatch;
     }
 
     public function memory(): ?int
